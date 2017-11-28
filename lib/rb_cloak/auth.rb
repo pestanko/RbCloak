@@ -5,7 +5,7 @@ require 'json'
 
 require_relative 'logging'
 
-module KeycloakAdmin
+module RbCloak
   class Auth
     include LoggingSupport
 
@@ -24,11 +24,11 @@ module KeycloakAdmin
       JSON.parse(response.body)
     rescue RestClient::BadRequest => ex
       log.error("Bad request: #{ex}: #{ex.response}")
-      raise KeycloakAdmin::Auth::InvalidCredentialsError.new(ex)
+      raise RbCloak::Auth::InvalidCredentialsError.new(ex)
     end
 
     def access_token
-      tokens['access_token']
+      @access_token ||= tokens['access_token']
     end
   end
 end

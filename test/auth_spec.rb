@@ -2,9 +2,9 @@
 
 require_relative 'test_helper'
 
-require 'keycloak_admin/auth'
+require 'rb_cloak/auth'
 
-describe KeycloakAdmin::Auth do
+describe RbCloak::Auth do
   describe '#token' do
     let(:url) do
       TestConfig.url
@@ -15,7 +15,7 @@ describe KeycloakAdmin::Auth do
     end
 
     let(:auth) do
-      KeycloakAdmin::Auth.new(url, credentials)
+      RbCloak::Auth.new(url, credentials)
     end
 
     it 'will return valid token for valid credentials' do
@@ -23,8 +23,8 @@ describe KeycloakAdmin::Auth do
     end
 
     it 'will throw an exception invalid credentials' do
-      assert_raises(KeycloakAdmin::Auth::InvalidCredentialsError) do
-        KeycloakAdmin::Auth.new(url, {}).access_token
+      assert_raises(RbCloak::Auth::InvalidCredentialsError) do
+        RbCloak::Auth.new(url, {}).access_token
       end
     end
   end

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'keycloak_admin/auth'
-require_relative 'keycloak_admin/realms'
+require_relative 'rb_cloak/auth'
+require_relative 'rb_cloak/realms'
 
-module KeycloakAdmin
+module RbCloak
   class Client
     attr_reader :url
 
@@ -18,11 +18,11 @@ module KeycloakAdmin
     end
 
     def auth
-      @auth ||= KeycloakAdmin::Auth.new(@url, @credentials)
+      @auth ||= RbCloak::Auth.new(@url, @credentials)
     end
 
     def realms
-      @realms ||= KeycloakAdmin::Realms.new(self)
+      @realms ||= RbCloak::Realms.new(self)
     end
   end
 end

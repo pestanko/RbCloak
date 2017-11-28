@@ -2,7 +2,7 @@
 
 require 'logger'
 
-module KeycloakAdmin
+module RbCloak
   # Custom logging module
   module LoggingSupport
     # @api public

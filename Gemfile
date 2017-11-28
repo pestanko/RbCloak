@@ -7,4 +7,5 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 # Specify your gem's dependencies in keycloak_admin.gemspec
 gemspec
 
+gem 'minitest-hooks', '~> 1.4'
 gem 'rest-client'

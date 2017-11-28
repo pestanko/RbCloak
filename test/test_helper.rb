@@ -1,6 +1,6 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'keycloak_admin'
-
+require 'rb_cloak'
+require 'minitest/hooks/default'
 require 'minitest/autorun'
 
 module TestConfig
@@ -17,7 +17,7 @@ module TestConfig
       username: username,
       password: password,
       grant_type: 'password',
-      client_id: 'admin-cli'
+      client_id: 'admin-cli',
     }
   end
 
@@ -27,6 +27,10 @@ module TestConfig
 
   def self.username
     login.split(':')[0]
+  end
+
+  def self.client
+    @client ||= RbCloak::Client.new(url, username, password)
   end
 end
 
