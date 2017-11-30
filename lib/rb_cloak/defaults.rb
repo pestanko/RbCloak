@@ -3,12 +3,12 @@
 require 'rest-client'
 require 'json'
 
-require_relative 'logging'
+require_relative 'tools/logging'
 
 module RbCloak
   # Defaults client
   class Defaults
-    include LoggingSupport
+    include Tools::LoggingSupport
     attr_reader :client
 
     def auth

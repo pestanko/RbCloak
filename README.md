@@ -1,4 +1,5 @@
 # RbCloak
+Based on documentation for **Keycloak 3.4**: http://www.keycloak.org/docs-api/3.4/rest-api/index.html
 
 
 ## Installation

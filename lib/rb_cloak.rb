@@ -9,7 +9,7 @@ module RbCloak
 
     def initialize(url, username, password, log_level: 'debug')
       @url = url
-      LoggingSupport.set_level(log_level)
+      Tools::LoggingSupport.set_level(log_level)
       @credentials = {
         username: username,
         password: password,

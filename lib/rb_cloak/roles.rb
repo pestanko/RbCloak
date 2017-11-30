@@ -6,7 +6,7 @@ require_relative 'defaults'
 
 module RbCloak
   # Documentation:
-  # * REST: http://www.keycloak.org/docs-api/3.0/rest-api/index.html#_roles_resource
+  # * REST: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_roles_resource
   class Roles < Defaults
     attr_reader :parent
     def initialize(client, parent)
@@ -19,7 +19,7 @@ module RbCloak
     end
   end
 
-  # ROLE_ENTITY: http://www.keycloak.org/docs-api/3.0/rest-api/index.html#_rolerepresentation
+  # ROLE_ENTITY: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_rolerepresentation
   class Role < Default
     def entity_id
       entity[:name]

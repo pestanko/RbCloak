@@ -3,11 +3,11 @@
 require 'rest-client'
 require 'json'
 
-require_relative 'logging'
+require_relative 'tools/logging'
 
 module RbCloak
   class Auth
-    include LoggingSupport
+    include Tools::LoggingSupport
 
     class InvalidCredentialsError < RuntimeError; end
 

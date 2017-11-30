@@ -3,10 +3,12 @@
 require_relative 'defaults'
 require_relative 'users'
 require_relative 'clients'
+require_relative 'groups'
+require_relative 'identity_providers'
 
 module RbCloak
   # Realms administration:
-  #   http://www.keycloak.org/docs-api/3.0/rest-api/index.html#_realms_admin_resource
+  #   http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_realms_admin_resource
   class Realms < Defaults
     def url
       super + '/realms'
@@ -17,7 +19,7 @@ module RbCloak
     end
   end
 
-  # http://www.keycloak.org/docs-api/3.0/rest-api/index.html#_realmrepresentation
+  # http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_realmrepresentation
   class Realm < Default
     def entity_id
       entity[:realm]
@@ -33,6 +35,14 @@ module RbCloak
 
     def clients
       RbCloak::Clients.new(client, self)
+    end
+
+    def groups
+      RbCloak::Groups.new(client, self)
+    end
+
+    def identity_providers
+      RbCloak::IdentityProviders.new(client, self)
     end
   end
 end

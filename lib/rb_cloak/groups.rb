@@ -4,8 +4,8 @@ require_relative 'defaults'
 
 module RbCloak
   # Documentation:
-  # * REST: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_users_resource
-  class Users < Defaults
+  # * REST: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_groups_resource
+  class Groups < Defaults
     attr_reader :parent
     def initialize(client, parent)
       super(client)
@@ -13,18 +13,18 @@ module RbCloak
     end
 
     def url
-      parent.url + '/users'
+      parent.url + '/groups'
     end
   end
 
-  # USER_ENTITY: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_userrepresentation
-  class User < Default
+  # USER_ENTITY: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_grouprepresentation
+  class Group < Default
     def entity_id
       entity[:id]
     end
 
     def entity_name
-      entity[:username]
+      entity[:name]
     end
   end
 end

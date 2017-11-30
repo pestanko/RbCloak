@@ -4,7 +4,7 @@ require_relative 'test_helper'
 
 require 'rb_cloak/roles'
 
-describe RbCloak::Users do
+describe RbCloak::Roles do
   before(:all) do
     @realm_name = 'test_client_role_realm'
     @client     = TestConfig.client
