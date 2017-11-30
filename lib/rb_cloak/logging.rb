@@ -30,9 +30,13 @@ module RbCloak
     def self.get_logger(log_level: nil, name: nil)
       log = Logger.new(STDERR)
       log.progname = name if name
-      log_level = log_level || ENV['KEYCLOAK_ADMIN_LOG_LEVEL'] || 'debug'
+      log_level = log_level || ENV['KEYCLOAK_ADMIN_LOG_LEVEL'] || @log_level || 'debug'
       log.level = get_level log_level
       logging_format log
+    end
+
+    def self.set_level(level)
+      @log_level = level
     end
 
     # @api public

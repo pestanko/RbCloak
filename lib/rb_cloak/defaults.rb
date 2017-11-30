@@ -33,14 +33,14 @@ module RbCloak
 
     def list
       log.info("Listing #{manager_name}: #{url}")
-      result = RestClient.get(url, headers)
+      result = make_request { RestClient.get(url, headers) }
       log.debug("List response: #{result}")
       create_instance result
     end
 
     def create(**params)
       log.info("Creating #{resource_name} (#{url}): #{params}")
-      result = RestClient.post(url, JSON.dump(params), headers)
+      result = make_request { RestClient.post(url, JSON.dump(params), headers) }
       log.debug("Create response: #{result}")
       result
     end
@@ -49,16 +49,29 @@ module RbCloak
     def delete(id)
       path = "#{url}/#{id}"
       log.info("Delete #{resource_name}: #{path}")
-      RestClient.delete(path, headers)
+      make_request { RestClient.delete(path, headers) }
       true
     end
 
     def read(id)
       path = "#{url}/#{id}"
       log.info("Reading #{resource_name}: #{path}")
-      res = RestClient.get(path, headers)
+      res = make_request{ RestClient.get(path, headers) }
       log.debug("Reading response: #{res}")
       create_instance res
+    end
+
+    def find_by_name(name)
+      res = list.select { |e| e.entity_name == name }
+      res[0] unless res.empty?
+    end
+
+    def find(&block)
+      list.select block
+    end
+
+    def find_by(**params)
+      list.select { |e| params.all? { |k, v| e[k] == v } }
     end
 
     # @api public
@@ -70,12 +83,11 @@ module RbCloak
       id ||= attributes[:id]
       path = url
       path = "#{path}/#{id}" unless id.nil?
-      log.info("Update [#{path}]: #{attributes}")
+      log.info("Updating [#{path}]: #{attributes}")
       body = JSON.dump(attributes)
-      RestClient
-        .method(method)
-        .call(path, body, headers)
-
+      make_request { RestClient.method(method).call(path, body, headers) }
+    rescue StandardError => ex
+      log.error(ex.response)
     end
 
     def resource_name
@@ -105,6 +117,16 @@ module RbCloak
       log.debug("Creating entity of #{resource_name}: #{entity}")
       resource_klass.new(self, entity)
     end
+
+    def make_request(&block)
+      block.call
+    rescue RestClient::Unauthorized
+      auth.invalidate
+      make_request(&block)
+    rescue StandardError => ex
+      log.error(ex.response)
+      ex.response
+    end
   end
 
   # Default resource
@@ -126,6 +148,10 @@ module RbCloak
       @entity[:id]
     end
 
+    def entity_name
+      @entity[:name]
+    end
+
     def entity
       read unless @entity
       @entity
@@ -136,7 +162,7 @@ module RbCloak
     end
 
     def update
-      @client.update(entity, id: entity_id)
+      @client.update(@entity, id: entity_id)
     end
 
     def read
@@ -168,7 +194,8 @@ module RbCloak
     # @param [String] value Value of the property
     # @return [object] Value of the property
     def []=(key, value)
-      entity[key.to_sym] = value
+      ley = key.to_sym
+      entity[ley] = value
     end
 
     # Respond to method missing

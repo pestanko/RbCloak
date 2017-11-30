@@ -4,16 +4,17 @@ require_relative 'rb_cloak/auth'
 require_relative 'rb_cloak/realms'
 
 module RbCloak
-  class Client
+  class KeycloakClient
     attr_reader :url
 
-    def initialize(url, username, password)
+    def initialize(url, username, password, log_level: 'debug')
       @url = url
+      LoggingSupport.set_level(log_level)
       @credentials = {
         username: username,
         password: password,
         grant_type: 'password',
-        client_id: 'admin-cli'
+        client_id: 'admin-cli',
       }
     end
 

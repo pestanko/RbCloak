@@ -24,11 +24,15 @@ module RbCloak
       JSON.parse(response.body)
     rescue RestClient::BadRequest => ex
       log.error("Bad request: #{ex}: #{ex.response}")
-      raise RbCloak::Auth::InvalidCredentialsError.new(ex)
+      raise RbCloak::Auth::InvalidCredentialsError, ex
     end
 
     def access_token
       @access_token ||= tokens['access_token']
+    end
+
+    def invalidate
+      @access_token = nil
     end
   end
 end

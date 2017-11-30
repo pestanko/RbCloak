@@ -2,13 +2,13 @@
 
 require_relative 'test_helper'
 
-require 'rb_cloak/defaults'
+require 'rb_cloak/realms'
 
 describe RbCloak::Realms do
   let(:url) { TestConfig.url }
   let(:username) { TestConfig.username }
   let(:password) { TestConfig.password }
-  let(:client) { RbCloak::Client.new(url, username, password) }
+  let(:client) { RbCloak::KeycloakClient.new(url, username, password) }
   let(:realm) { RbCloak::Realms.new(client) }
 
   describe '#list' do

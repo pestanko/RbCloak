@@ -1,15 +1,12 @@
-# KeycloakAdmin
+# RbCloak
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/keycloak_admin`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'keycloak_admin'
+gem 'rb_cloak'
 ```
 
 And then execute:
@@ -18,7 +15,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install keycloak_admin
+    $ gem install rb_cloak
 
 ## Usage
 
