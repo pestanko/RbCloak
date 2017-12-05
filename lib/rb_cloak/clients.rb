@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'defaults'
-require_relative 'roles'
+require_relative 'client_roles'
 
 module RbCloak
   # Documentation:
@@ -29,7 +29,7 @@ module RbCloak
     end
 
     def roles
-      RbCloak::Roles.new(client, self)
+      RbCloak::ClientRoles.new(client, self)
     end
   end
 end

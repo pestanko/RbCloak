@@ -7,7 +7,7 @@ module RbCloak
   class KeycloakClient
     attr_reader :url
 
-    def initialize(url, username, password, log_level: 'debug')
+    def initialize(url, username:, password:, log_level: 'debug')
       @url = url
       Tools::LoggingSupport.set_level(log_level)
       @credentials = {

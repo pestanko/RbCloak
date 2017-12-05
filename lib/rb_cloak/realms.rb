@@ -3,6 +3,7 @@
 require_relative 'defaults'
 require_relative 'users'
 require_relative 'clients'
+require_relative 'realm_roles'
 require_relative 'groups'
 require_relative 'identity_providers'
 
@@ -30,19 +31,23 @@ module RbCloak
     end
 
     def users
-      RbCloak::Users.new(client, self)
+      @users ||= RbCloak::Users.new(client, self)
     end
 
     def clients
-      RbCloak::Clients.new(client, self)
+      @clients ||= RbCloak::Clients.new(client, self)
     end
 
     def groups
-      RbCloak::Groups.new(client, self)
+      @groups ||=RbCloak::Groups.new(client, self)
+    end
+
+    def roles
+      @users ||= RbCloak::RealmRoles.new(client, self)
     end
 
     def identity_providers
-      RbCloak::IdentityProviders.new(client, self)
+      @providers ||= RbCloak::IdentityProviders.new(client, self)
     end
   end
 end

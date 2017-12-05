@@ -102,20 +102,21 @@ module RbCloak
       self.class.name.split('::').last
     end
 
-    def create_instance(response)
+    def create_instance(response, klass: nil)
       content = JSON.parse(response.body, symbolize_names: true)
       if content.is_a?(Array)
         content.each_with_object([]) do |entity, obj|
-          obj << _create_entity(entity)
+          obj << _create_entity(entity, klass: klass)
         end
       else
-        _create_entity content
+        _create_entity(content, klass: klass)
       end
     end
 
-    def _create_entity(entity)
+    def _create_entity(entity, klass)
+      klass ||= resource_klass
       log.debug("Creating entity of #{resource_name}: #{entity}")
-      resource_klass.new(self, entity)
+      klass.new(self, entity)
     end
 
     def make_request(&block)
