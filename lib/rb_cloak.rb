@@ -14,15 +14,14 @@ module RbCloak
     # @param [String] username Username
     # @param [String] password Password
     # @param [String] log_level Log level for the keycloak admin client (debug|info|warn|error)
-    def initialize(url, username: nil, password: nil, log_level: 'debug')
+    def initialize(url, username: nil, password: nil, client_id: nil, client_secret: nil, log_level: 'debug')
       @url = url
       Tools::LoggingSupport.set_level(log_level)
-      @credentials = {
-        username: username,
-        password: password,
-        grant_type: 'password',
-        client_id: 'admin-cli',
-      }
+      @credentials = if username
+                       user_credentials(username, password)
+                     else
+                       service_credentials(client_id, client_secret)
+                     end
     end
 
     # Gets an authorization module to obtain the access token
@@ -35,6 +34,25 @@ module RbCloak
     # @return [RbCloak::Realm]
     def realms
       @realms ||= RbCloak::Realms.new(self)
+    end
+
+    private
+
+    def user_credentials(username, password)
+      {
+        username: username,
+        password: password,
+        grant_type: 'password',
+        client_id: 'admin-cli',
+      }
+    end
+
+    def service_credentials(id, secret)
+      {
+        client_id: id,
+        client_secret: secret,
+        grant_type: 'client_credentials',
+      }
     end
   end
 end

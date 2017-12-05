@@ -14,8 +14,20 @@ describe RbCloak::Auth do
       TestConfig.credentials
     end
 
+    let(:client_credentials) do
+      TestConfig.client_credentials
+    end
+
     let(:auth) do
       RbCloak::Auth.new(url, credentials)
+    end
+
+    let(:auth_client) do
+      RbCloak::Auth.new(url, client_credentials)
+    end
+
+    it 'will return valid token for valid client credentials' do
+      auth_client.access_token.wont_be_nil
     end
 
     it 'will return valid token for valid credentials' do

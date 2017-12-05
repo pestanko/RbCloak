@@ -7,8 +7,8 @@ require_relative 'client_permissions'
 
 module RbCloak
   # Documentation:
-  # * REST: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_client_templates_resource
-  class ClientTemplates < Defaults
+  # * REST: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_role_mapper_resource
+  class RoleMappings < Defaults
     attr_reader :parent
     def initialize(client, parent)
       super(client)
@@ -16,12 +16,12 @@ module RbCloak
     end
 
     def url
-      parent.url + '/client-templates'
+      parent.url + '/role-mappings'
     end
   end
 
-  # TEMPLATE_ENTITY: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_clienttemplaterepresentation
-  class ClientTemplate < Default
+  # ENTITY: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_mappingsrepresentation
+  class RoleMapping < Default
     def entity_id
       entity[:id]
     end

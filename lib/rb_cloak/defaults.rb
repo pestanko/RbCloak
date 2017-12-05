@@ -169,7 +169,7 @@ module RbCloak
       auth.invalidate
       make_request(&block)
     rescue StandardError => ex
-      log.error(ex.response)
+      log.error("[#{ex}] #{ex.response}")
       ex.response
     end
 

@@ -21,6 +21,22 @@ module TestConfig
     }
   end
 
+  def self.client_credentials
+    {
+      client_id: client_id,
+      client_secret: client_secret,
+      grant_type: 'client_credentials',
+    }
+  end
+
+  def self.client_id
+    @client_id ||= ENV['KEYCLOAK_CLIENT_ID'] || 'foo'
+  end
+
+  def self.client_secret
+    @client_secret ||= ENV['KEYCLOAK_CLIENT_SECRET'] || '0f53a8b3-7246-44d1-8e1c-80927febc130'
+  end
+
   def self.password
     login.split(':')[1]
   end
@@ -30,6 +46,7 @@ module TestConfig
   end
 
   def self.client
+    #@client ||= RbCloak::KeycloakClient.new(url, client_id: client_id, client_secret: client_secret)
     @client ||= RbCloak::KeycloakClient.new(url, username: username, password: password)
   end
 
