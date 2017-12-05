@@ -8,7 +8,7 @@ describe RbCloak::Realms do
   let(:url) { TestConfig.url }
   let(:username) { TestConfig.username }
   let(:password) { TestConfig.password }
-  let(:client) { RbCloak::KeycloakClient.new(url, username, password) }
+  let(:client) { TestConfig.client }
   let(:realm) { RbCloak::Realms.new(client) }
 
   describe '#list' do

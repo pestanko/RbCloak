@@ -30,7 +30,7 @@ module TestConfig
   end
 
   def self.client
-    @client ||= RbCloak::KeycloakClient.new(url, username, password)
+    @client ||= RbCloak::KeycloakClient.new(url, username: username, password: password)
   end
 end
 

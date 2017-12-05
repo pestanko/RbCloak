@@ -11,6 +11,9 @@ module RbCloak
     include Tools::LoggingSupport
     attr_reader :client
 
+    # Gets an auth object
+    #
+    # @return [RbCloak::Auth] Auth object instance
     def auth
       client.auth
     end
@@ -19,18 +22,30 @@ module RbCloak
       @client = client
     end
 
+    # Gets the authorization header
+    #
+    # @return [Hash] Authorization header
     def authorization_header
       { Authorization: "Bearer #{auth.access_token}" }
     end
 
+    # Gets the header with a Content type json and merged with an authorization header
+    #
+    # @return [Hash] Content type and an authorization header
     def headers
       { 'Content-Type' => 'application/json' }.merge(authorization_header)
     end
 
+    # Gets url
+    #
+    # @return [String] Url to receive an resource
     def url
       "#{client.url}/auth/admin"
     end
 
+    # Lists a resources
+    #
+    # @return [List] List of resources
     def list
       log.info("Listing #{manager_name}: #{url}")
       result = make_request { RestClient.get(url, headers) }
@@ -38,6 +53,9 @@ module RbCloak
       create_instance result
     end
 
+    # Creates a resource
+    #
+    # @param [Hash] params Parameters to create parameters
     def create(**params)
       log.info("Creating #{resource_name} (#{url}): #{params}")
       result = make_request { RestClient.post(url, JSON.dump(params), headers) }
@@ -46,6 +64,8 @@ module RbCloak
     end
 
     # Default delete function
+    #
+    # @param [Fixnum] id Id of a resource
     def delete(id)
       path = "#{url}/#{id}"
       log.info("Delete #{resource_name}: #{path}")
@@ -53,6 +73,10 @@ module RbCloak
       true
     end
 
+    # Reads an resource
+    #
+    # @param [Fixnum] id Id of a resource
+    # @return [RbShift::Default] Resource instance
     def read(id)
       path = "#{url}/#{id}"
       log.info("Reading #{resource_name}: #{path}")
@@ -61,20 +85,31 @@ module RbCloak
       create_instance res
     end
 
+    # Finds a resource by name
+    #
+    # @param [String] name Name of the resource
+    # @return [RbShift::Default] Resource instance
     def find_by_name(name)
       res = list.select { |e| e.entity_name == name }
       res[0] unless res.empty?
     end
 
+    # Finds resources by given condition in block
+    #
+    # @param [Block] block Block with a condition
+    # @return [List] list of the resources
     def find(&block)
       list.select block
     end
 
+    # Finds by parameters
+    #
+    # @param [Hash] params Parameters to filter by
+    # @return [List] list of the resources
     def find_by(**params)
       list.select { |e| params.all? { |k, v| e[k] == v } }
     end
 
-    # @api public
     # Updates existing resource
     #
     # @param [Hash, Default] attributes Attributes that will be updated
@@ -90,10 +125,16 @@ module RbCloak
       log.error(ex.response)
     end
 
+    # Gets a resource name
+    #
+    # @return [String] Resource name
     def resource_name
       manager_name.chomp('s')
     end
 
+    # Gets a resource klass
+    #
+    # @return [Class] Resource klass
     def resource_klass
       RbCloak.const_get(resource_name.to_sym)
     end
@@ -102,6 +143,11 @@ module RbCloak
       self.class.name.split('::').last
     end
 
+    # Creates an instance of the klass (resource)
+    #
+    # @param [Hash] response Response hash
+    # @param [Class] klass Resource class
+    # @return [RbCloak::Default]
     def create_instance(response, klass: nil)
       content = JSON.parse(response.body, symbolize_names: true)
       if content.is_a?(Array)
@@ -113,12 +159,10 @@ module RbCloak
       end
     end
 
-    def _create_entity(entity, klass)
-      klass ||= resource_klass
-      log.debug("Creating entity of #{resource_name}: #{entity}")
-      klass.new(self, entity)
-    end
-
+    # Wraps an request to invalidate access token and logs an invalid response
+    #
+    # @param [Block] block Request call to be wrapped
+    # @return [RestClient::Response] response for the request
     def make_request(&block)
       block.call
     rescue RestClient::Unauthorized
@@ -127,6 +171,14 @@ module RbCloak
     rescue StandardError => ex
       log.error(ex.response)
       ex.response
+    end
+
+    private
+
+    def _create_entity(entity, klass: nil)
+      klass ||= resource_klass
+      log.debug("Creating entity of #{resource_name}: #{entity}")
+      klass.new(self, entity)
     end
   end
 
@@ -138,34 +190,48 @@ module RbCloak
       "#{@client.url}/#{entity_id}"
     end
 
-    # @param [object] client
-    # @param [Hash] entity
+    # Initializes an resource
+    #
+    # @param [object] client Resource client
+    # @param [Hash] entity Parameters of the resource
     def initialize(client, entity)
       @client    = client
       @entity    = entity
     end
 
+    # Gets an entity id
+    #
+    # @return [String, Fixnum] entity id
     def entity_id
       @entity[:id]
     end
 
+    # Gets an entity name
+    #
+    # @return [String, Fixnum] entity name
     def entity_name
       @entity[:name]
     end
 
+    # Gets an internal parameters hash
+    #
+    # @return [Hash] entity hash
     def entity
       read unless @entity
       @entity
     end
 
+    # Deletes an resource
     def delete
       @client.delete(entity_id)
     end
 
+    # Updates an resource
     def update
       @client.update(@entity, id: entity_id)
     end
 
+    # Reads a resource again
     def read
       ent = @client.read(entity_id)
       @entity = ent.entity
@@ -175,11 +241,6 @@ module RbCloak
       @entity.to_s
     end
 
-    def manager_instance(manager, *args)
-      manager.new(@client, self, *args)
-    end
-
-    # @api public
     # Access properties of the resource contained in the entity
     #
     # @param [String] key Name of the property
