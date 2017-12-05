@@ -2,20 +2,20 @@
 
 require_relative 'test_helper'
 
-require 'rb_cloak/clients'
+require 'rb_cloak/client_templates'
 
-describe RbCloak::Clients do
+describe RbCloak::ClientTemplates do
   before(:all) do
-    @realm = TestConfig.test_realm('client')
+    @realm = TestConfig.test_realm('client_templates')
   end
 
   after(:all) do
     @realm.delete
   end
 
-  let(:manager) { @realm.manager }
+  let(:manager) { @realm.client_templates }
 
-  let(:entity_name) { 'test_client' }
+  let(:entity_name) { 'test_template' }
   let(:new_entity) { manager.find_by_name(entity_name) }
 
   before do
@@ -45,23 +45,22 @@ describe RbCloak::Clients do
     end
   end
 
-  # describe '#update' do
-  #   it 'will update the client\'s description' do
-  #     new_entity[:bearerOnly].must_equal false
-  #     new_entity[:bearerOnly] = true
-  #     new_entity.update
-  #     client_read = clients.read(new_entity[:id])
-  #     client_read[:bearerOnly].must_equal true
-  #   end
-  # end
+  describe '#update' do
+    it 'will update the client\'s template description' do
+      new_entity[:description] = 'Test template desc'
+      new_entity.update
+      entity_read = manager.read(new_entity[:id])
+      entity_read[:description].must_equal 'Test template desc'
+    end
+  end
 
   describe '#create' do
-    it 'will list the client' do
+    it 'will list the client template' do
       new_entity[:name].must_equal entity_name
       manager.find_by_name(entity_name)[:id].must_equal new_entity[:id]
     end
 
-    it 'will create client' do
+    it 'will create client template' do
       new_entity[:name].must_equal entity_name
     end
   end

@@ -6,32 +6,28 @@ require 'rb_cloak/users'
 
 describe RbCloak::Users do
   before(:all) do
-    @realm_name = 'test_user_realm'
-    @client     = TestConfig.client
-    @realms     = RbCloak::Realms.new(@client)
-    @realms.create(realm: @realm_name)
-    @realm = @realms.read(@realm_name)
+    @realm = TestConfig.test_realm('users')
   end
 
   after(:all) do
     @realm.delete
   end
 
-  let(:users) { @realm.users }
-  let(:username) { 'test_user' }
-  let(:new_user) { users.list[0] }
+  let(:manager) { @realm.users }
+  let(:entity_name) { 'test_user' }
+  let(:new_entity) { manager.list[0] }
 
   before do
-    users.create(username: username)
+    manager.create(username: entity_name)
   end
 
   after do
-    users.delete(users.list[0][:id])
+    manager.delete(manager.list[0][:id])
   end
 
 
   describe '#list' do
-    let(:user_list) { users.list }
+    let(:user_list) { manager.list }
 
     it 'will return an array' do
       user_list.must_be_kind_of Array
@@ -44,26 +40,26 @@ describe RbCloak::Users do
 
   describe '#read' do
     it 'will list the user' do
-      users.read(new_user[:id])[:username].must_equal username
+      manager.read(new_entity[:id])[:username].must_equal entity_name
     end
   end
 
   describe '#update' do
     it 'will update the user' do
-      email = "#{username}@example.com"
-      new_user[:email] = email
-      new_user.update
-      users.read(new_user[:id])[:email].must_equal email
+      email = "#{entity_name}@example.com"
+      new_entity[:email] = email
+      new_entity.update
+      manager.read(new_entity[:id])[:email].must_equal email
     end
   end
 
   describe '#create' do
     it 'will list the user' do
-      users.list[0][:username].must_equal username
+      manager.list[0][:username].must_equal entity_name
     end
 
     it 'will create user' do
-      new_user[:username].must_equal username
+      new_entity[:username].must_equal entity_name
     end
   end
 end

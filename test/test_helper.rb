@@ -32,5 +32,14 @@ module TestConfig
   def self.client
     @client ||= RbCloak::KeycloakClient.new(url, username: username, password: password)
   end
+
+  def self.test_realm(name)
+    realm_name = "test_#{name}_realm"
+    client     = TestConfig.client
+    realms     = RbCloak::Realms.new(client)
+
+    realms.create(realm: realm_name)
+    realms.read(realm_name)
+  end
 end
 

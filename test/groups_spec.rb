@@ -6,32 +6,28 @@ require 'rb_cloak/groups'
 
 describe RbCloak::Groups do
   before(:all) do
-    @realm_name = 'test_group_realm'
-    @client     = TestConfig.client
-    @realms     = RbCloak::Realms.new(@client)
-    @realms.create(realm: @realm_name)
-    @realm = @realms.read(@realm_name)
+    @realm = TestConfig.test_realm('groups')
   end
 
   after(:all) do
     @realm.delete
   end
 
-  let(:groups) { @realm.groups }
+  let(:manager) { @realm.groups }
 
-  let(:group_name) { 'test_group' }
-  let(:new_group) { groups.find_by_name(group_name) }
+  let(:entity_name) { 'test_group' }
+  let(:new_entity) { manager.find_by_name(entity_name) }
 
   before do
-    groups.create(name: group_name)
+    manager.create(name: entity_name)
   end
 
   after do
-    groups.delete(groups.find_by_name(group_name)[:id])
+    manager.delete(manager.find_by_name(entity_name)[:id])
   end
 
   describe '#list' do
-    let(:client_list) { groups.list }
+    let(:client_list) { manager.list }
 
     it 'will return an array' do
       client_list.must_be_kind_of Array
@@ -45,18 +41,18 @@ describe RbCloak::Groups do
 
   describe '#read' do
     it 'will list the group' do
-      groups.read(new_group[:id])[:name].must_equal group_name
+      manager.read(new_entity[:id])[:name].must_equal entity_name
     end
   end
 
   describe '#create' do
     it 'will list the client' do
-      new_group[:name].must_equal group_name
-      groups.find_by_name(group_name)[:id].must_equal new_group[:id]
+      new_entity[:name].must_equal entity_name
+      manager.find_by_name(entity_name)[:id].must_equal new_entity[:id]
     end
 
     it 'will create client' do
-      new_group[:name].must_equal group_name
+      new_entity[:name].must_equal entity_name
     end
   end
 end

@@ -6,32 +6,28 @@ require 'rb_cloak/identity_providers'
 
 describe RbCloak::IdentityProviders do
   before(:all) do
-    @realm_name = 'test_provider_realm'
-    @client     = TestConfig.client
-    @realms     = RbCloak::Realms.new(@client)
-    @realms.create(realm: @realm_name)
-    @realm = @realms.read(@realm_name)
+    @realm = TestConfig.test_realm('identity')
   end
 
   after(:all) do
     @realm.delete
   end
 
-  let(:providers) { @realm.identity_providers }
-  let(:provider_name) { 'test_provider' }
-  let(:new_provider) { providers.find_by_name(provider_name) }
+  let(:manager) { @realm.identity_providers }
+  let(:entity_name) { 'test_provider' }
+  let(:new_provider) { manager.find_by_name(entity_name) }
 
   before do
-    providers.create(alias: provider_name)
+    manager.create(alias: entity_name)
   end
 
   after do
-    new_provider.delete
+    new_entity.delete
   end
 
 
   describe '#list' do
-    let(:user_list) { providers.list }
+    let(:user_list) { manager.list }
 
     it 'will return an array' do
       user_list.must_be_kind_of Array
@@ -44,28 +40,28 @@ describe RbCloak::IdentityProviders do
 
   describe '#read' do
     it 'will list the provider' do
-      provider = new_provider
-      providers.read(provider[:alias])[:alias].must_equal provider_name
+      provider = new_entity
+      manager.read(provider[:alias])[:alias].must_equal entity_name
     end
   end
 
   describe '#update' do
     it 'will update the provider' do
-      new_provider[:enabled].must_equal true
-      new_provider[:enabled] = false
-      new_provider.update
-      provider_read = providers.read(new_provider[:alias])
+      new_entity[:enabled].must_equal true
+      new_entity[:enabled] = false
+      new_entity.update
+      provider_read = manager.read(new_entity[:alias])
       provider_read[:enabled].must_equal true
     end
   end
 
   describe '#create' do
     it 'will list the provider' do
-      providers.list[0][:alias].must_equal provider_name
+      manager.list[0][:alias].must_equal entity_name
     end
 
     it 'will create provider' do
-      new_provider[:alias].must_equal provider_name
+      new_entity[:alias].must_equal entity_name
     end
   end
 end
