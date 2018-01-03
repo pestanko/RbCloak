@@ -52,7 +52,7 @@ module RbCloak
     #
     # @return [List] List of resources
     def list
-      log.info("Listing #{manager_name}: #{url}")
+      log.debug("Listing #{manager_name}: #{url}")
       result = make_request { RestClient.get(url, headers) }
       log.debug("List response: #{result}")
       create_instance result
@@ -84,7 +84,7 @@ module RbCloak
     # @return [RbShift::Default] Resource instance
     def read(id)
       path = "#{url}/#{id}"
-      log.info("Reading #{resource_name}: #{path}")
+      log.debug("Reading #{resource_name}: #{path}")
       res = make_request{ RestClient.get(path, headers) }
       log.debug("Reading response: #{res}")
       create_instance res
