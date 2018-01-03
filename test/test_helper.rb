@@ -30,11 +30,11 @@ module TestConfig
   end
 
   def self.client_id
-    @client_id ||= ENV['KEYCLOAK_CLIENT_ID'] || 'foo'
+    @client_id ||= ENV['KEYCLOAK_CLIENT_ID'] || 'admin-api-client'
   end
 
   def self.client_secret
-    @client_secret ||= ENV['KEYCLOAK_CLIENT_SECRET'] || '0f53a8b3-7246-44d1-8e1c-80927febc130'
+    @client_secret ||= ENV['KEYCLOAK_CLIENT_SECRET'] || '88cd8603-cf39-41ef-8e09-0719b91bcf9f'
   end
 
   def self.password
@@ -57,6 +57,18 @@ module TestConfig
 
     realms.create(realm: realm_name)
     realms.read(realm_name)
+  end
+
+  def self.test_client(realm, client_name, **params)
+    client_name = "test_#{client_name}_client"
+    realm.clients.create(name: client_name, clientId: client_name, **params)
+    realm.clients.find_by_client_id(client_name)
+  end
+
+  def self.test_client_with_realm(name, **params)
+    realm = test_realm(name)
+    client = test_client(realm, name, **params)
+    [realm, client]
   end
 end
 

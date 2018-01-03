@@ -35,7 +35,7 @@ module RbCloak
       @users ||= RbCloak::Users.new(client, self)
     end
 
-    def manager
+    def clients
       @clients ||= RbCloak::Clients.new(client, self)
     end
 

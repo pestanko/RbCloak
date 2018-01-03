@@ -11,6 +11,11 @@ module RbCloak
     include Tools::LoggingSupport
     attr_reader :client
 
+    class RbCloakError < StandardError; end
+
+    class CannotCreateResourceError < RbCloakError
+    end
+
     # Gets an auth object
     #
     # @return [RbCloak::Auth] Auth object instance
@@ -90,7 +95,7 @@ module RbCloak
     # @param [String] name Name of the resource
     # @return [RbShift::Default] Resource instance
     def find_by_name(name)
-      res = list.select { |e| e.entity_name == name }
+      res = find { |e| e.entity_name == name }
       res[0] unless res.empty?
     end
 
@@ -99,7 +104,7 @@ module RbCloak
     # @param [Block] block Block with a condition
     # @return [List] list of the resources
     def find(&block)
-      list.select block
+      list.select(&block)
     end
 
     # Finds by parameters
@@ -107,7 +112,7 @@ module RbCloak
     # @param [Hash] params Parameters to filter by
     # @return [List] list of the resources
     def find_by(**params)
-      list.select { |e| params.all? { |k, v| e[k] == v } }
+      find { |e| params.all? { |k, v| e[k] == v } }
     end
 
     # Updates existing resource
@@ -148,14 +153,19 @@ module RbCloak
     # @param [Hash] response Response hash
     # @param [Class] klass Resource class
     # @return [RbCloak::Default]
-    def create_instance(response, klass: nil)
+    def create_instance(response, klass: nil, manager_bind: self)
+
+      if response.strip.empty?
+        raise CannotCreateResourceError, 'Response is empty, cannot create instance'
+      end
+
       content = JSON.parse(response.body, symbolize_names: true)
       if content.is_a?(Array)
         content.each_with_object([]) do |entity, obj|
-          obj << _create_entity(entity, klass: klass)
+          obj << _create_entity(entity, klass: klass, bind: manager_bind)
         end
       else
-        _create_entity(content, klass: klass)
+        _create_entity(content, klass: klass, bind: manager_bind)
       end
     end
 
@@ -175,10 +185,10 @@ module RbCloak
 
     private
 
-    def _create_entity(entity, klass: nil)
+    def _create_entity(entity, klass: nil, bind: self)
       klass ||= resource_klass
       log.debug("Creating entity of #{resource_name}: #{entity}")
-      klass.new(self, entity)
+      klass.new(bind, entity)
     end
   end
 

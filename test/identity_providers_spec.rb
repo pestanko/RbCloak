@@ -15,7 +15,7 @@ describe RbCloak::IdentityProviders do
 
   let(:manager) { @realm.identity_providers }
   let(:entity_name) { 'test_provider' }
-  let(:new_provider) { manager.find_by_name(entity_name) }
+  let(:new_entity) { manager.find_by_name(entity_name) }
 
   before do
     manager.create(alias: entity_name)

@@ -6,9 +6,7 @@ require 'rb_cloak/client_roles'
 
 describe RbCloak::ClientRoles do
   before(:all) do
-    @realm = TestConfig.test_realm('client_role')
-    @realm.manager.create(name: 'test_client')
-    @client = @realm.manager.find_by_name('test_client')
+    @realm, @client = TestConfig.test_client_with_realm('client_roles')
   end
 
   after(:all) do

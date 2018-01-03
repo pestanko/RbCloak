@@ -13,7 +13,7 @@ describe RbCloak::Clients do
     @realm.delete
   end
 
-  let(:manager) { @realm.manager }
+  let(:manager) { @realm.clients }
 
   let(:entity_name) { 'test_client' }
   let(:new_entity) { manager.find_by_name(entity_name) }
