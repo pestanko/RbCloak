@@ -11,9 +11,13 @@ module RbCloak
     include Tools::LoggingSupport
     attr_reader :client
 
-    class RbCloakError < StandardError; end
+    class RbCloakError < RuntimeError; end
 
     class CannotCreateResourceError < RbCloakError
+    end
+
+    def fail_on_bad_request?
+      client.fail_on_bad_request?
     end
 
     # Gets an auth object
@@ -128,6 +132,7 @@ module RbCloak
       make_request { RestClient.method(method).call(path, body, headers) }
     rescue StandardError => ex
       log.error(ex.response)
+      raise RbCloakError, ex if fail_on_bad_request?
     end
 
     # Gets a resource name
