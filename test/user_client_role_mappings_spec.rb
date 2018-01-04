@@ -37,12 +37,27 @@ describe RbCloak::UserClientRoleMapping do
     it 'will list available mapping for the client' do
       avail_list.must_be_kind_of Array
     end
+
+    it 'will contain create client role' do
+      create_client = avail_list.select { |role| role['name'] == 'create-client' }[0]
+      create_client.wont_be_nil
+      create_client['name'].must_equal 'create-client'
+    end
   end
 
-  describe '#available' do
+  describe '#composite' do
     let(:composite_list) { manager.available }
     it 'will list composite mapping for the client' do
       composite_list.must_be_kind_of Array
+    end
+  end
+
+  describe '#create' do
+    let(:avail_list) { manager.available }
+    it 'will update the service account roles' do
+      create_client = avail_list.select { |role| role['name'] == 'create-client' }
+      manager.create(create_client)
+      manager.list.wont_be_empty
     end
   end
 end

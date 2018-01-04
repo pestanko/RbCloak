@@ -56,19 +56,24 @@ module RbCloak
     #
     # @return [List] List of resources
     def list
-      log.debug("Listing #{manager_name}: #{url}")
+      log.debug("LIST #{manager_name}: #{url}")
+      result = find_all
+      log.debug("LIST response: #{result}")
+      result
+    end
+
+    def find_all
       result = make_request { RestClient.get(url, headers) }
-      log.debug("List response: #{result}")
       create_instance result
     end
 
     # Creates a resource
     #
     # @param [Hash] params Parameters to create parameters
-    def create(**params)
-      log.info("Creating #{resource_name} (#{url}): #{params}")
+    def create(params)
+      log.info("CREATE #{resource_name} (#{url}): #{params}")
       result = make_request { RestClient.post(url, JSON.dump(params), headers) }
-      log.debug("Create response: #{result}")
+      log.debug("CREATE response: #{result}")
       result
     end
 
@@ -77,7 +82,7 @@ module RbCloak
     # @param [Fixnum] id Id of a resource
     def delete(id)
       path = "#{url}/#{id}"
-      log.info("Delete #{resource_name}: #{path}")
+      log.info("DELETE #{resource_name}: #{path}")
       make_request { RestClient.delete(path, headers) }
       true
     end
@@ -88,9 +93,9 @@ module RbCloak
     # @return [RbShift::Default] Resource instance
     def read(id)
       path = "#{url}/#{id}"
-      log.debug("Reading #{resource_name}: #{path}")
+      log.debug("READ #{resource_name}: #{path}")
       res = make_request{ RestClient.get(path, headers) }
-      log.debug("Reading response: #{res}")
+      log.debug("READ response: #{res}")
       create_instance res
     end
 
@@ -108,7 +113,7 @@ module RbCloak
     # @param [Block] block Block with a condition
     # @return [List] list of the resources
     def find(&block)
-      list.select(&block)
+      find_all.select(&block)
     end
 
     # Finds by parameters
@@ -127,12 +132,11 @@ module RbCloak
       id ||= attributes[:id]
       path = url
       path = "#{path}/#{id}" unless id.nil?
-      log.info("Updating [#{path}]: #{attributes}")
+      log.info("UPDATE [#{path}]: #{attributes}")
       body = JSON.dump(attributes)
       make_request { RestClient.method(method).call(path, body, headers) }
     rescue StandardError => ex
       log.error(ex.response)
-      raise RbCloakError, ex if fail_on_bad_request?
     end
 
     # Gets a resource name
@@ -186,13 +190,14 @@ module RbCloak
     rescue StandardError => ex
       log.error("[#{ex}] #{ex.response}")
       ex.response
+      raise RbCloakError, ex if fail_on_bad_request?
     end
 
     private
 
     def _create_entity(entity, klass: nil, bind: self)
       klass ||= resource_klass
-      log.debug("Creating entity of #{resource_name}: #{entity}")
+      log.debug("ENTITY of #{resource_name}: #{entity}")
       klass.new(bind, entity)
     end
   end

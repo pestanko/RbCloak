@@ -20,17 +20,17 @@ module RbCloak
 
     def available
       path = "#{url}/available"
-      log.debug("Listing available #{manager_name}: #{path}")
+      log.debug("AVAILABLE #{manager_name}: #{path}")
       result = make_request { RestClient.get(path, headers) }
-      log.debug("List response: #{result}")
+      log.debug("AVAILABLE response: #{result}")
       create_instance result
     end
 
     def composite
       path = "#{url}/composite"
-      log.debug("Listing available #{manager_name}: #{path}")
+      log.debug("COMPOSITE #{manager_name}: #{path}")
       result = make_request { RestClient.get(path, headers) }
-      log.debug("List response: #{result}")
+      log.debug("COMPOSITE response : #{result}")
       create_instance result
     end
   end

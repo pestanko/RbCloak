@@ -32,9 +32,9 @@ module RbCloak
 
     def service_account_user(client_id)
       path = "#{url}/#{client_id}/service-account-user"
-      log.debug("Listing service account client #{manager_name}: #{path}")
+      log.debug("SERVICE_ACCOUNT #{manager_name}: #{path}")
       result = make_request { RestClient.get(path, headers) }
-      log.debug("List response: #{result}")
+      log.debug("SERVICE_ACCOUNT response: #{result}")
       create_instance result, klass: ServiceAccountUser, manager_bind: realm.users
     end
   end
