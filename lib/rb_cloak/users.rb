@@ -23,6 +23,11 @@ module RbCloak
 
   # USER_ENTITY: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_userrepresentation
   class User < Default
+
+    def realm
+      client.realm
+    end
+
     def entity_id
       entity[:id]
     end

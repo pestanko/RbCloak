@@ -50,6 +50,10 @@ module RbCloak
 
   # CLIENT_ENTITY: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_clientrepresentation
   class Client < Default
+    def realm
+      client.realm
+    end
+
     def entity_id
       entity[:id]
     end
