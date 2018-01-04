@@ -45,15 +45,11 @@ describe RbCloak::Clients do
     end
   end
 
-  # describe '#update' do
-  #   it 'will update the client\'s description' do
-  #     new_entity[:bearerOnly].must_equal false
-  #     new_entity[:bearerOnly] = true
-  #     new_entity.update
-  #     client_read = clients.read(new_entity[:id])
-  #     client_read[:bearerOnly].must_equal true
-  #   end
-  # end
+  describe '#secret' do
+    it 'will show the client secret' do
+      new_entity.secret.wont_be_nil
+    end
+  end
 
   describe '#create' do
     it 'will list the client' do

@@ -37,6 +37,15 @@ module RbCloak
       log.debug("SERVICE_ACCOUNT response: #{result}")
       create_instance result, klass: ServiceAccountUser, manager_bind: realm.users
     end
+
+    def client_secret(client_id)
+      path = "#{url}/#{client_id}/client-secret"
+      log.debug("CLIENT_SECRET #{manager_name}: #{path}")
+      result = make_request { RestClient.get(path, headers) }
+      log.debug("CLIENT_SECRET response: #{result}")
+      content = parse_response(result)
+      content[:value]
+    end
   end
 
   # CLIENT_ENTITY: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_clientrepresentation
@@ -47,6 +56,14 @@ module RbCloak
 
     def entity_name
       entity[:name]
+    end
+
+    def secret
+      client.client_secret(entity_id)
+    end
+
+    def credentials
+      { clientId: entity[:clientId], secret: secret }
     end
 
     def service_account

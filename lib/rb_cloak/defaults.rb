@@ -13,7 +13,7 @@ module RbCloak
 
     class RbCloakError < RuntimeError; end
 
-    class CannotCreateResourceError < RbCloakError
+    class CannotParseResourceError < RbCloakError
     end
 
     def fail_on_bad_request?
@@ -163,12 +163,8 @@ module RbCloak
     # @param [Class] klass Resource class
     # @return [RbCloak::Default]
     def create_instance(response, klass: nil, manager_bind: self)
+      content = parse_response(response)
 
-      if response.strip.empty?
-        raise CannotCreateResourceError, 'Response is empty, cannot create instance'
-      end
-
-      content = JSON.parse(response.body, symbolize_names: true)
       if content.is_a?(Array)
         content.each_with_object([]) do |entity, obj|
           obj << _create_entity(entity, klass: klass, bind: manager_bind)
@@ -176,6 +172,18 @@ module RbCloak
       else
         _create_entity(content, klass: klass, bind: manager_bind)
       end
+    end
+
+    # Parses the json response and symbolizes names
+    #
+    # @param [RestClient::Response] response
+    # @return [Hash] parsed response
+    def parse_response(response)
+      if response.body.strip.empty?
+        raise CannotParseResourceError, 'Response is empty, cannot create instance'
+      end
+
+      JSON.parse(response.body, symbolize_names: true)
     end
 
     # Wraps an request to invalidate access token and logs an invalid response
