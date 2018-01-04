@@ -14,6 +14,11 @@ module RbCloak
       @client_id = client_id
     end
 
+    def add_mappings(*mappings)
+      extracted = mappings.map(&:entity)
+      create(extracted)
+    end
+
     def url
       parent.url + "/role-mappings/clients/#{@client_id}"
     end

@@ -52,11 +52,11 @@ describe RbCloak::UserClientRoleMapping do
     end
   end
 
-  describe '#create' do
+  describe '#add_mappings' do
     let(:avail_list) { manager.available }
     it 'will update the service account roles' do
-      create_client = avail_list.select { |role| role['name'] == 'create-client' }
-      manager.create(create_client)
+      mappings = avail_list.select { |role| role['name'] == 'create-client' }
+      manager.add_mappings(*mappings)
       manager.list.wont_be_empty
     end
   end

@@ -27,7 +27,7 @@ module RbCloak
 
     def find_by_client_id(client_id)
       res = find { |client| client['clientId'] == client_id }
-      res[0] if res
+      res[0] unless res.empty?
     end
 
     def service_account_user(client_id)

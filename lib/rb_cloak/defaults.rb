@@ -72,9 +72,7 @@ module RbCloak
     # @param [Hash] params Parameters to create parameters
     def create(params)
       log.info("CREATE #{resource_name} (#{url}): #{params}")
-      result = make_request { RestClient.post(url, JSON.dump(params), headers) }
-      log.debug("CREATE response: #{result}")
-      result
+      make_request { RestClient.post(url, JSON.dump(params), headers) }
     end
 
     # Default delete function
@@ -84,7 +82,6 @@ module RbCloak
       path = "#{url}/#{id}"
       log.info("DELETE #{resource_name}: #{path}")
       make_request { RestClient.delete(path, headers) }
-      true
     end
 
     # Reads an resource
@@ -205,7 +202,6 @@ module RbCloak
 
     def _create_entity(entity, klass: nil, bind: self)
       klass ||= resource_klass
-      log.debug("ENTITY of #{resource_name}: #{entity}")
       klass.new(bind, entity)
     end
   end
