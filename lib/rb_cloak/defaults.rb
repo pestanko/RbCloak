@@ -188,17 +188,27 @@ module RbCloak
     # @param [Block] block Request call to be wrapped
     # @return [RestClient::Response] response for the request
     def make_request(&block)
-      block.call
-    rescue RestClient::Unauthorized
-      auth.invalidate
-      make_request(&block)
-    rescue StandardError => ex
-      log.error("[#{ex}] #{ex.response}")
-      ex.response
+      reauthorize_request(&block)
+    rescue RestClient::Exception => ex
+      response = ex.response
+      log.error("[#{ex}] #{response}")
+      response
       raise RbCloakError, ex if fail_on_bad_request?
     end
 
     private
+
+    def reauthorize_request(counter: 10, &block)
+      block.call
+    rescue RestClient::Unauthorized => ex
+      if counter <= 0
+        log.error('Authorization error!!!')
+        raise ex
+      end
+      log.debug('Unauthorized, reauthorizing.')
+      auth.invalidate
+      reauthorize_request(counter: counter - 1, &block)
+    end
 
     def _create_entity(entity, klass: nil, bind: self)
       klass ||= resource_klass

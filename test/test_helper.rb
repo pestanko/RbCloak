@@ -55,7 +55,7 @@ module TestConfig
     client     = TestConfig.client
     realms     = RbCloak::Realms.new(client)
 
-    realms.create(realm: realm_name)
+    realms.create(realm: realm_name, enabled: true)
     realms.read(realm_name)
   end
 
@@ -69,6 +69,14 @@ module TestConfig
     realm = test_realm(name)
     client = test_client(realm, name, **params)
     [realm, client]
+  end
+
+  def self.test_user(realm, username, **params)
+    username = "test_#{username}_client"
+    realm.users.create(username: username, enabled: true, emailVerified: true, **params)
+    user = realm.users.find_by_name(username)
+    user.password('123456')
+    user
   end
 end
 

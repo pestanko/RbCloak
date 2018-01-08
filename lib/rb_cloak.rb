@@ -35,7 +35,7 @@ module RbCloak
     #
     # @return [RbCloak::Auth]
     def auth
-      @auth ||= RbCloak::Auth.new(@url, @credentials)
+      @auth ||= RbCloak::Auth.new(@url, @credentials, realm: 'master')
     end
 
     # Gets a realm manager to be able to access, create, list, or update realms

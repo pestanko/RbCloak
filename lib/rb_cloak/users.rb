@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json'
+
 require_relative 'defaults'
 require_relative 'user_client_scope_mappings'
 
@@ -19,6 +21,21 @@ module RbCloak
     def url
       parent.url + '/users'
     end
+
+    def set_password(user_id, password, **params)
+      params = {
+        value:     password,
+        temporary: false,
+        type:      'password',
+      }.merge(params)
+
+      url = "#{self.url}/#{user_id}/reset-password"
+      log.info("Setting password: (PUT #{url})")
+      body = JSON.dump(params)
+      result = make_request { RestClient.put(url, body, headers) }
+      log.debug("Password set response: #{result}")
+      self
+    end
   end
 
   # USER_ENTITY: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_userrepresentation
@@ -34,6 +51,10 @@ module RbCloak
 
     def entity_name
       entity[:username]
+    end
+
+    def password(passwd, **kwargs)
+      client.set_password(entity_id, passwd, **kwargs)
     end
   end
 
