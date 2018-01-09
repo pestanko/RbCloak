@@ -9,8 +9,8 @@ describe RbCloak::Auth do
     let(:url) { TestConfig.url }
     let(:credentials) { TestConfig.credentials }
     let(:client_credentials) { TestConfig.client_credentials }
-    let(:auth) { RbCloak::Auth.new(url, credentials) }
-    let(:auth_client) { RbCloak::Auth.new(url, client_credentials) }
+    let(:auth) { RbCloak::Auth.auth_token(:DirectAccessFlow, url, **credentials) }
+    let(:auth_client) { RbCloak::Auth.auth_token(:DirectAccessFlow, url, client_credentials) }
 
     it 'will return valid token for valid client credentials' do
       auth_client.access_token.wont_be_nil
@@ -22,7 +22,7 @@ describe RbCloak::Auth do
 
     it 'will throw an exception invalid credentials' do
       assert_raises(RbCloak::Auth::InvalidCredentialsError) do
-        RbCloak::Auth.new(url, {}).access_token
+        RbCloak::Auth.auth_token(:DirectAccessFlow, url).access_token
       end
     end
   end

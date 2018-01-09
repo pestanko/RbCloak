@@ -66,6 +66,10 @@ module RbCloak
       client.client_secret(entity_id)
     end
 
+    def client_id
+      entity[:clientId]
+    end
+
     def credentials
       { clientId: entity[:clientId], secret: secret }
     end

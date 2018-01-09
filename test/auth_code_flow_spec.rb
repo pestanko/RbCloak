@@ -4,7 +4,7 @@ require_relative 'test_helper'
 
 require 'rb_cloak/auth'
 
-describe RbCloak::AuthCodeFlow do
+describe RbCloak::Auth::AuthCodeFlow do
   describe '#token' do
 
     before(:all) do
@@ -19,16 +19,18 @@ describe RbCloak::AuthCodeFlow do
     end
 
     let(:auth) do
-      RbCloak::AuthCodeFlow.new(TestConfig.url,
-                                realm:         @realm[:realm],
-                                client_id:     @client[:clientId],
-                                client_secret: @client.secret,
-                                username:      @user[:username],
-                                password:      '123456')
+      RbCloak::Auth::AuthCodeFlow.new(TestConfig.url,
+                                      realm:         @realm[:realm],
+                                      client_id:     @client.client_id,
+                                      client_secret: @client.secret,
+                                      username:      @user[:username],
+                                      password:      '123456')
     end
 
+    let(:auth_token) { auth.auth_token }
+
     it 'will be valid flow' do
-      auth.token.wont_be_nil
+      auth_token.access_token.wont_be_nil
     end
   end
 end
