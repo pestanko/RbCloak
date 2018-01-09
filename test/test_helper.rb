@@ -72,7 +72,7 @@ module TestConfig
   end
 
   def self.test_user(realm, username, **params)
-    username = "test_#{username}_client"
+    username = "test_#{username}_user"
     realm.users.create(username: username, enabled: true, emailVerified: true, **params)
     user = realm.users.find_by_name(username)
     user.password('123456')

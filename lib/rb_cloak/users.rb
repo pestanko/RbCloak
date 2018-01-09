@@ -32,7 +32,7 @@ module RbCloak
       url = "#{self.url}/#{user_id}/reset-password"
       log.info("Setting password: (PUT #{url})")
       body = JSON.dump(params)
-      result = make_request { RestClient.put(url, body, headers) }
+      result = check_request { RestClient.put(url, body, headers) }
       log.debug("Password set response: #{result}")
       self
     end

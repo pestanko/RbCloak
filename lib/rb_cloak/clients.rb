@@ -33,7 +33,7 @@ module RbCloak
     def service_account_user(client_id)
       path = "#{url}/#{client_id}/service-account-user"
       log.debug("SERVICE_ACCOUNT #{manager_name}: #{path}")
-      result = make_request { RestClient.get(path, headers) }
+      result = check_request { RestClient.get(path, headers) }
       log.debug("SERVICE_ACCOUNT response: #{result}")
       create_instance result, klass: ServiceAccountUser, manager_bind: realm.users
     end
@@ -41,7 +41,7 @@ module RbCloak
     def client_secret(client_id)
       path = "#{url}/#{client_id}/client-secret"
       log.debug("CLIENT_SECRET #{manager_name}: #{path}")
-      result = make_request { RestClient.get(path, headers) }
+      result = check_request { RestClient.get(path, headers) }
       log.debug("CLIENT_SECRET response: #{result}")
       content = parse_response(result)
       content[:value]

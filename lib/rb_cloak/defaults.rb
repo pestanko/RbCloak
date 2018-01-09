@@ -63,7 +63,7 @@ module RbCloak
     end
 
     def find_all
-      result = make_request { RestClient.get(url, headers) }
+      result = check_request { RestClient.get(url, headers) }
       create_instance result
     end
 
@@ -72,7 +72,7 @@ module RbCloak
     # @param [Hash] params Parameters to create parameters
     def create(params)
       log.info("CREATE #{resource_name} (#{url}): #{params}")
-      make_request { RestClient.post(url, JSON.dump(params), headers) }
+      check_request { RestClient.post(url, JSON.dump(params), headers) }
     end
 
     # Default delete function
@@ -81,7 +81,7 @@ module RbCloak
     def delete(id)
       path = "#{url}/#{id}"
       log.info("DELETE #{resource_name}: #{path}")
-      make_request { RestClient.delete(path, headers) }
+      check_request { RestClient.delete(path, headers) }
     end
 
     # Reads an resource
@@ -91,7 +91,7 @@ module RbCloak
     def read(id)
       path = "#{url}/#{id}"
       log.debug("READ #{resource_name}: #{path}")
-      res = make_request{ RestClient.get(path, headers) }
+      res = check_request{ RestClient.get(path, headers) }
       log.debug("READ response: #{res}")
       create_instance res
     end
@@ -131,7 +131,7 @@ module RbCloak
       path = "#{path}/#{id}" unless id.nil?
       log.info("UPDATE [#{path}]: #{attributes}")
       body = JSON.dump(attributes)
-      make_request { RestClient.method(method).call(path, body, headers) }
+      check_request { RestClient.method(method).call(path, body, headers) }
     rescue StandardError => ex
       log.error(ex.response)
     end
@@ -187,7 +187,7 @@ module RbCloak
     #
     # @param [Block] block Request call to be wrapped
     # @return [RestClient::Response] response for the request
-    def make_request(&block)
+    def check_request(&block)
       reauthorize_request(&block)
     rescue RestClient::Exception => ex
       response = ex.response

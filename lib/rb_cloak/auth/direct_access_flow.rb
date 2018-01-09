@@ -7,6 +7,8 @@ module RbCloak
   module Auth
     class DirectAccessFlow < GeneralFlow
     end
+
+    # Direct access flow using client_id and secret
     class DirectAccessFlowClient < DirectAccessFlow
       def credentials
         {
@@ -15,6 +17,7 @@ module RbCloak
       end
     end
 
+    # Direct access flow using username and password
     class DirectAccessFlowUser < DirectAccessFlow
       def credentials
         {
