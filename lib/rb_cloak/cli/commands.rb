@@ -3,6 +3,7 @@
 require 'clamp'
 
 require_relative 'tools'
+require_relative 'rbcloak_wrapper'
 require_relative '../tools/logging'
 
 module RbCloak
@@ -41,6 +42,15 @@ module RbCloak
         def action_name
           @action_name ||= short_name.chomp('SubCommand')
         end
+      end
+
+      def client
+        RbCloakWrapper.instance.client
+      end
+
+      def print_entity(obj)
+        entity = obj.entity
+        puts JSON.pretty_generate(entity)
       end
     end
 

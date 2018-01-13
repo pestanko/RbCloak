@@ -4,6 +4,7 @@ require 'clamp'
 require_relative 'entities'
 require_relative 'tools'
 require_relative '../tools/logging'
+require_relative 'login'
 
 module RbCloak
   module Cli
@@ -19,6 +20,8 @@ module RbCloak
         end
       end
       load_entities
+
+      subcommand 'login', 'Provide login informations for the keycloack', LoginCommand
     end
   end
 end
