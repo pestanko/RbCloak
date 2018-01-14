@@ -36,7 +36,7 @@ describe 'RbCloak::Cli::Realms' do
     end
 
     it 'will delete a realm' do
-      TestConfig.cli('realms delete realm')
+      TestConfig.cli("realms delete -v #{new_realm[:realm]}")
       realm.read(realm_name).must_be_nil
     end
   end

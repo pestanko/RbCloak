@@ -63,12 +63,14 @@ module RbCloak
         include Mixins::AbstractReadSubMixin
 
         def execute
-          entity = find_entity
+          entity = find_entity.first
           entity.delete
         end
 
         def self.included(klass)
           klass.extend self
+
+          klass.parameter 'entity', 'Entity name' if klass.respond_to?(:parameter)
         end
       end
 
