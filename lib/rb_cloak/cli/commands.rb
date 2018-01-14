@@ -5,11 +5,13 @@ require 'clamp'
 require_relative 'tools'
 require_relative 'rbcloak_wrapper'
 require_relative '../tools/logging'
+require_relative 'mixins'
 
 module RbCloak
   module Cli
     class AbstractCommand < Clamp::Command
       extend RbCloak::Tools::LoggingSupport
+      include RbCloak::Tools::LoggingSupport
       class << self
         def short_name
           name.split('::').last
@@ -22,11 +24,6 @@ module RbCloak
         puts 'RbCloak-1.0'
         exit(0)
       end
-
-      def say(message)
-        message = message.upcase if verbose?
-        puts message
-      end
     end
 
     class AbstractSubCommand < AbstractCommand
@@ -36,11 +33,19 @@ module RbCloak
         end
 
         def description
-          "#{action_name} the entity"
+          "#{action_name} the #{get_outer_class.entity_name.downcase}"
         end
 
         def action_name
           @action_name ||= short_name.chomp('SubCommand')
+        end
+
+        def get_outer_class
+          @outer_class ||= begin
+            outer_class_name = name.split('::')[-2]
+            klass            = RbCloak::Cli::Entities.const_get(outer_class_name)
+            klass
+          end
         end
       end
 
@@ -48,9 +53,25 @@ module RbCloak
         RbCloakWrapper.instance.client
       end
 
+      def manager
+        client.realms
+      end
+
       def print_entity(obj)
         entity = obj.entity
         puts JSON.pretty_generate(entity)
+      end
+
+      def entity_name
+        @entity_name ||= self.class.get_outer_class.entity_name
+      end
+    end
+
+    class RealmBindAbstractSubCommand < AbstractSubCommand
+      option ['--realm'], 'REALM', 'name of the realm', required: true
+
+      def manager
+        super.read(realm).method("#{entity_name.downcase}s".to_sym).call
       end
     end
 
@@ -61,7 +82,7 @@ module RbCloak
         end
 
         def command
-          entity_name.downcase
+          "#{entity_name.downcase}s"
         end
 
         def description

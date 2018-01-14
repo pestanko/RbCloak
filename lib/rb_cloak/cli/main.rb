@@ -19,9 +19,11 @@ module RbCloak
           end
         end
       end
+
       load_entities
 
-      subcommand 'login', 'Provide login informations for the keycloack', LoginCommand
+      subcommand 'login', 'Provide login information for the keycloack', LoginCommand
+      subcommand 'logout', 'Logout the keycloack', LogoutCommand
     end
   end
 end

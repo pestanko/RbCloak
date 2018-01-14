@@ -58,7 +58,7 @@ module RbCloak
       def self.logging_format(logger)
         default_formatter = Logger::Formatter.new
         logger.formatter = proc do |severity, datetime, progname, msg|
-          default_formatter.call(severity, datetime, "(#{progname})", msg.dump)
+          default_formatter.call(severity, datetime, "(#{progname})", msg.to_s)
         end
         logger
       end

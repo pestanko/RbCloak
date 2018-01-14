@@ -17,5 +17,14 @@ module RbCloak
                                             password: password
       end
     end
+
+    class LogoutCommand < AbstractCommand
+
+      def execute
+        RbCloakWrapper.instance.credentials url: nil,
+                                            username: nil,
+                                            password: nil
+      end
+    end
   end
 end

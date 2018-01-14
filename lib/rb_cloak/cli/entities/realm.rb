@@ -7,18 +7,17 @@ require_relative '../commands'
 module RbCloak
   module Cli
     module Entities
+      # Realm management command
       class RealmCommand < AbstractManageCommand
+
         class ListSubCommand < AbstractSubCommand
-          def execute
-            client.realms.list.each { |r| puts r[:realm] }
-          end
+          include Mixins::AbstractListSubMixin
+          print_params :realm
         end
+
         class ReadSubCommand < AbstractSubCommand
-          parameter 'realm_name', 'Realms name'
-          def execute
-            realm = client.realms.read(realm_name)
-            print_entity(realm)
-          end
+          include Mixins::AbstractReadSubMixin
+          find_param :realm
         end
 
         class CreateSubCommand < AbstractSubCommand
@@ -30,17 +29,11 @@ module RbCloak
         end
 
         class DeleteSubCommand < AbstractSubCommand
-          parameter 'realm_name', 'Realms name'
-          def execute
-            client.realms.delete(realm_name)
-          end
+          include Mixins::AbstractDeleteSubMixin
+          find_param :realm
         end
 
         load_entities
-
-        def execute
-
-        end
       end
     end
   end
