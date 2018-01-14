@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'bundler/setup'
-require 'rb_cloak/cli/main.rb'
-
+require 'rb_cloak/cli/main'
 
 RbCloak::Cli::MainCommand.run

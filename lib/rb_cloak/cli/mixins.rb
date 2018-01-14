@@ -41,8 +41,10 @@ module RbCloak
         end
 
         def find_entity
-          param = self.class.f_param.to_sym
-          manager.find_by(**{ param => entity_name })
+          param    = self.class.f_param.to_sym
+          resource = manager.find_by(**{ param => entity })
+          log.debug("[CLI] FOUND: #{resource}")
+          resource
         end
 
         def execute
@@ -53,7 +55,7 @@ module RbCloak
         def self.included(klass)
           klass.extend self
 
-          klass.parameter 'entity_name', 'Entity name' if klass.respond_to?(:parameter)
+          klass.parameter 'entity', 'Entity name' if klass.respond_to?(:parameter)
         end
       end
 

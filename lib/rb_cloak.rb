@@ -19,12 +19,12 @@ module RbCloak
     # @option credentials [String] password Password
     # @option credentials [String] client_id Client id
     # @option credentials [String] client_secret Client secret
-    def initialize(url, log_level: 'debug', fail: false, flow: nil, auth_token: nil, **credentials)
+    def initialize(url, log_level: nil, fail: false, flow: nil, auth_token: nil, **credentials)
       @auth_token  = auth_token
       @url         = url
       @credentials = credentials
       @flow        = flow || select_flow
-      Tools::LoggingSupport.set_level(log_level)
+      Tools::LoggingSupport.set_level(log_level) if log_level
       @fail = fail
     end
 

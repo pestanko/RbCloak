@@ -7,7 +7,6 @@ require 'yaml'
 
 require_relative '../tools/logging'
 
-
 module RbCloak
   module Cli
     class NotLoggedInError < RuntimeError;
@@ -110,7 +109,9 @@ module RbCloak
       end
 
       def client
-        @client ||= RbCloak::KeycloakClient.new(url, username: username, password: password)
+        @client ||= RbCloak::KeycloakClient.new(url,
+                                                username: username,
+                                                password: password)
       end
     end
   end

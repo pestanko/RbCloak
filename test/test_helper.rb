@@ -4,6 +4,12 @@ require 'minitest/hooks/default'
 require 'minitest/autorun'
 
 module TestConfig
+  extend RbCloak::Tools::LoggingSupport
+
+  def self.base_path
+    File.join(File.dirname(__FILE__), '../')
+  end
+
   def self.url
     @url ||= ENV['KEYCLOAK_URL'] || 'http://localhost:8080'
   end
@@ -46,7 +52,6 @@ module TestConfig
   end
 
   def self.client
-    #@client ||= RbCloak::KeycloakClient.new(url, client_id: client_id, client_secret: client_secret)
     @client ||= RbCloak::KeycloakClient.new(url, username: username, password: password)
   end
 
@@ -77,6 +82,13 @@ module TestConfig
     user = realm.users.find_by_name(username)
     user.password('123456')
     user
+  end
+
+  def self.cli(command)
+    bin = File.join(base_path, 'bin')
+    exe = File.join(bin, 'rbcloak')
+    log.debug("Executing: #{exe} #{command}")
+    `#{exe} #{command}`
   end
 end
 

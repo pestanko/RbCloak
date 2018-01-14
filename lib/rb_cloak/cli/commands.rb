@@ -10,15 +10,16 @@ require_relative 'mixins'
 module RbCloak
   module Cli
     class AbstractCommand < Clamp::Command
-      extend RbCloak::Tools::LoggingSupport
-      include RbCloak::Tools::LoggingSupport
+      include  RbCloak::Tools::LoggingSupport
       class << self
         def short_name
           name.split('::').last
         end
       end
 
-      option ['-v', '--verbose'], :flag, 'be verbose'
+      option ['-v', '--verbose'], :flag, 'be verbose' do
+        RbCloak::Tools::LoggingSupport.set_level(:debug)
+      end
 
       option '--version', :flag, 'show version' do
         puts 'RbCloak-1.0'
@@ -50,16 +51,24 @@ module RbCloak
       end
 
       def client
-        RbCloakWrapper.instance.client
+        instance = RbCloakWrapper.instance.client
+        log.debug("[CLI] KC Client instance created: #{instance}")
+        instance
       end
 
       def manager
-        client.realms
+        instance = client.realms
+        log.debug("[CLI] Manager instance created: #{instance}")
+        instance
       end
 
       def print_entity(obj)
-        entity = obj.entity
-        puts JSON.pretty_generate(entity)
+        if obj
+          entity = obj.entity
+          puts JSON.pretty_generate(entity)
+        else
+          puts 'Entity not found!'
+        end
       end
 
       def entity_name
@@ -71,7 +80,9 @@ module RbCloak
       option ['--realm'], 'REALM', 'name of the realm', required: true
 
       def manager
-        super.read(realm).method("#{entity_name.downcase}s".to_sym).call
+        instance = super.read(realm).method("#{entity_name.downcase}s".to_sym).call
+        log.debug("[CLI] Manager instance created: #{instance}")
+        instance
       end
     end
 

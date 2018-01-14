@@ -91,7 +91,7 @@ module RbCloak
     def read(id)
       path = "#{url}/#{id}"
       log.debug("READ #{resource_name}: #{path}")
-      res = check_request{ RestClient.get(path, headers) }
+      res = check_request { RestClient.get(path, headers) }
       log.debug("READ response: #{res}")
       create_instance res
     end
@@ -160,6 +160,8 @@ module RbCloak
     # @param [Class] klass Resource class
     # @return [RbCloak::Default]
     def create_instance(response, klass: nil, manager_bind: self)
+      return nil unless response
+
       content = parse_response(response)
 
       if content.is_a?(Array)

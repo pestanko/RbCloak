@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 require 'clamp'
+
+require_relative '../tools/logging'
+RbCloak::Tools::LoggingSupport.set_level(:warn)
+
 require_relative 'entities'
 require_relative 'tools'
-require_relative '../tools/logging'
 require_relative 'login'
 
 module RbCloak
   module Cli
     class MainCommand < AbstractCommand
-      extend RbCloak::Tools::LoggingSupport
+      include RbCloak::Tools::LoggingSupport
       class << self
         def load_entities
           entities = Tools.select_entities { |e| !e.name.include?('SubCommand') }
