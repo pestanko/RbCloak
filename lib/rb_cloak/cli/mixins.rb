@@ -43,7 +43,9 @@ module RbCloak
         def find_entity
           param    = self.class.f_param.to_sym
           resource = manager.find_by(**{ param => entity })
-          log.debug("[CLI] FOUND: #{resource}")
+          if !resource || resource.empty?
+            raise ResourceNotFoundError, "Cannot find entity: #{entity}"
+          end
           resource
         end
 
@@ -64,7 +66,7 @@ module RbCloak
 
         def execute
           entity = find_entity.first
-          entity.delete
+          entity.delete if entity
         end
 
         def self.included(klass)

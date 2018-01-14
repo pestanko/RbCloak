@@ -41,6 +41,22 @@ describe 'RbCloak CLI Client' do
     end
   end
 
+  describe '#delete' do
+    let(:new_entity_name) { 'client_to_delete' }
+    let(:new_delete_entity) do
+      manager.create(
+        clientId: new_entity_name,
+        name: new_entity_name
+      )
+      manager.find_by_name(new_entity_name)
+    end
+
+    it 'will delete a client' do
+      TestConfig.cli("clients delete -v --realm #{realm_name} #{new_delete_entity[:name]}")
+      manager.find_by_name(new_delete_entity[:name]).must_be_nil
+    end
+  end
+
   describe '#secret' do
     # TODO
   end

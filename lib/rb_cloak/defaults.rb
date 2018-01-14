@@ -277,6 +277,10 @@ module RbCloak
       @entity.to_s
     end
 
+    def inspect
+      @entity.to_s
+    end
+
     # Access properties of the resource contained in the entity
     #
     # @param [String] key Name of the property

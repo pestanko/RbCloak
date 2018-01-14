@@ -9,6 +9,9 @@ require_relative 'mixins'
 
 module RbCloak
   module Cli
+    class ResourceNotFoundError < RuntimeError; end
+
+
     class AbstractCommand < Clamp::Command
       include  RbCloak::Tools::LoggingSupport
       class << self
@@ -51,15 +54,11 @@ module RbCloak
       end
 
       def client
-        instance = RbCloakWrapper.instance.client
-        log.debug("[CLI] KC Client instance created: #{instance}")
-        instance
+        RbCloakWrapper.instance.client
       end
 
       def manager
-        instance = client.realms
-        log.debug("[CLI] Manager instance created: #{instance}")
-        instance
+        client.realms
       end
 
       def print_entity(obj)
