@@ -56,7 +56,9 @@ module RbCloak
 
         def self.included(klass)
           klass.extend self
+        end
 
+        def self.extended(klass)
           klass.parameter 'entity', 'Entity name' if klass.respond_to?(:parameter)
         end
       end
@@ -76,6 +78,63 @@ module RbCloak
         end
       end
 
+      module AbstractReadContentSubMixin
+        def read_content
+          content = if file && FILE.exists?(file)
+                      FILE.read(file)
+                    else
+                      STDOUT
+                    end
+          JSON.parse(content, symbolize_names: true)
+        end
+
+        def self.included(klass)
+          klass.extend self
+
+          klass.parameter 'entity', 'Entity name' if klass.respond_to?(:parameter)
+          if klass.respond_to?(:option)
+            klass.option ['-f', '--file'], 'FILE', 'JSON Entity spec file', required: false
+          end
+        end
+      end
+
+      module AbstractCreateSubMixin
+        include Mixins::AbstractReadContentSubMixin
+
+        def execute
+          content = read_content
+          manager.create(**content)
+        end
+
+        def self.included(klass)
+          klass.extend self
+
+          if klass.respond_to?(:option)
+            klass.option ['-f', '--file'], 'FILE', 'JSON Entity spec file', required: false
+          end
+        end
+      end
+
+      module AbstractUpdateSubMixin
+        include Mixins::AbstractReadSubMixin
+        include Mixins::AbstractReadContentSubMixin
+
+        def execute
+          entity  = find_entity.first
+          content = read_content
+          entity.entity.merge(content)
+          entity.update
+        end
+
+        def self.included(klass)
+          klass.extend self
+
+          klass.parameter 'entity', 'Entity name' if klass.respond_to?(:parameter)
+          if klass.respond_to?(:option)
+            klass.option ['-f', '--file'], 'FILE', 'JSON Entity spec file', required: false
+          end
+        end
+      end
     end
   end
 end

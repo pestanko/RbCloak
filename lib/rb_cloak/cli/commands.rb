@@ -10,8 +10,6 @@ require_relative 'mixins'
 module RbCloak
   module Cli
     class ResourceNotFoundError < RuntimeError; end
-
-
     class AbstractCommand < Clamp::Command
       include  RbCloak::Tools::LoggingSupport
       class << self
