@@ -21,11 +21,12 @@ module RbCloak
         end
 
         class CreateSubCommand < RealmBindAbstractSubCommand
-          # TODO
+          include Mixins::AbstractCreateSubMixin
         end
 
         class UpdateSubCommand < RealmBindAbstractSubCommand
-          # TODO
+          include Mixins::AbstractUpdateSubMixin
+          find_param :username
         end
 
         class DeleteSubCommand < RealmBindAbstractSubCommand
