@@ -9,9 +9,9 @@ require_relative '../tools/logging'
 
 module RbCloak
   module Cli
-    class NotLoggedInError < RuntimeError;
+    class NotLoggedInError < RuntimeError
     end
-    class MissingParamError < RuntimeError;
+    class MissingParamError < RuntimeError
     end
 
     class Config

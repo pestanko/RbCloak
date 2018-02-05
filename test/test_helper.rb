@@ -84,9 +84,13 @@ module TestConfig
     user
   end
 
-  def self.cli(command)
+  def self.binary_path
     bin = File.join(base_path, 'bin')
-    exe = File.join(bin, 'rbcloak')
+    File.join(bin, 'rbcloak')
+  end
+
+  def self.cli(command)
+    exe = binary_path
     log.debug("Executing: #{exe} #{command}")
     `#{exe} #{command}`
   end

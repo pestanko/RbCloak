@@ -83,7 +83,7 @@ module RbCloak
           content = if file && FILE.exists?(file)
                       FILE.read(file)
                     else
-                      STDOUT
+                      STDIN.read
                     end
           JSON.parse(content, symbolize_names: true)
         end
@@ -122,7 +122,9 @@ module RbCloak
         def execute
           entity  = find_entity.first
           content = read_content
-          entity.entity.merge(content)
+          log.debug("UPDATE: #{entity.entity}")
+          entity.entity.merge!(content)
+          log.debug("UPDATED: #{entity.entity}")
           entity.update
         end
 

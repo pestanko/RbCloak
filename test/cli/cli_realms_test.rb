@@ -42,10 +42,54 @@ describe 'RbCloak::Cli::Realms' do
   end
 
   describe '#create' do
-    # TODO
+
+    before do
+      command = "#{TestConfig.binary_path} realms create"
+      IO.popen(command, 'r+') do |io|
+        io.write '{ "realm": "test_realm_by_cli" }'
+        io.close_write
+        result = io.read
+      end
+    end
+
+    let(:created_realm) do
+      realm.read('test_realm_by_cli')
+    end
+
+    it 'will create realm' do
+      created_realm[:realm].must_equal 'test_realm_by_cli'
+    end
+
+    after do
+      created_realm.delete
+    end
   end
 
   describe '#update' do
-    # TODO
+    let(:realm_name) { 'test_updated_realm_cli' }
+    before do
+      realm.create(
+        realm: realm_name,
+        enabled: 'false'
+      )
+      updated
+    end
+
+    let(:updated) do
+      command = "#{TestConfig.binary_path} realms update #{realm_name}"
+      IO.popen(command, 'r+') do |io|
+        io.write '{ "enabled": true }'
+        io.close_write
+        result = io.read
+      end
+    end
+
+    let(:updated_realm) do
+      realm.read('test_updated_realm_cli')
+    end
+
+    it 'will be updated' do
+      updated_realm[:enabled].must_equal true
+    end
   end
 end
