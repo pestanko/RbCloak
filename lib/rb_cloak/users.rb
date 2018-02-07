@@ -40,7 +40,6 @@ module RbCloak
 
   # USER_ENTITY: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_userrepresentation
   class User < Default
-
     def realm
       client.realm
     end
@@ -57,7 +56,7 @@ module RbCloak
       client.set_password(entity_id, passwd, **kwargs)
     end
   end
-
+  # Service account user entity
   class ServiceAccountUser < User
     def client_role_mappings(client_id)
       RbCloak::UserClientRoleMappings.new(client, self, client_id)

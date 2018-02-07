@@ -171,6 +171,7 @@ module RbCloak
       return nil unless response
 
       content = parse_response(response)
+      return nil unless content
 
       if content.is_a?(Array)
         content.each_with_object([]) do |entity, obj|
@@ -186,9 +187,7 @@ module RbCloak
     # @param [RestClient::Response] response
     # @return [Hash] parsed response
     def parse_response(response)
-      if response.body.strip.empty?
-        raise CannotParseResourceError, 'Response is empty, cannot create instance'
-      end
+      return nil if response.body.strip.empty?
 
       JSON.parse(response.body, symbolize_names: true)
     end
@@ -202,12 +201,13 @@ module RbCloak
     rescue RestClient::Exception => ex
       response = ex.response
       log.error("[#{ex}] #{response}")
-      response
       raise RbCloakError, ex if fail_on_bad_request?
+      response
     end
 
     private
 
+    # rubocop:disable Performance/RedundantBlockCall
     def reauthorize_request(counter: 10, &block)
       block.call
     rescue RestClient::Unauthorized => ex
@@ -219,6 +219,7 @@ module RbCloak
       auth.invalidate
       reauthorize_request(counter: counter - 1, &block)
     end
+    # rubocop:enable Performance/RedundantBlockCall
 
     def _create_entity(entity, klass: nil, bind: self)
       klass ||= resource_klass

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module RbCloak
   # Auth module
   module Auth
@@ -8,6 +7,7 @@ module RbCloak
     end
     # Parent class of the flows
     class GeneralFlow
+      attr_reader :credentials
       include Tools::LoggingSupport
       # Initializes the auth provider
       #
@@ -17,13 +17,6 @@ module RbCloak
         @url         = url
         @realm       = realm
         @credentials = credentials
-      end
-
-      # Returns the credentials
-      #
-      # @return [Hash] Credentials
-      def credentials
-        @credentials
       end
 
       # Returns the url to obtain the token
@@ -61,8 +54,8 @@ module RbCloak
       # Checks the request
       #
       # If the request throws an exception, it will logs it and extracts the response
-      def check_request(&block)
-        block.call
+      def check_request
+        yield
       rescue RestClient::Found => ex
         ex.response
       rescue RestClient::Exception => ex
@@ -78,6 +71,7 @@ module RbCloak
       end
     end
 
+    # Auth token representation
     class AuthToken
       # Creates instance of the auth token
       #

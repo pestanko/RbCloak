@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'rb_cloak'
 require 'minitest/hooks/default'
@@ -95,4 +97,3 @@ module TestConfig
     `#{exe} #{command}`
   end
 end
-

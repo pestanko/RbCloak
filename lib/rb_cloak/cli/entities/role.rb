@@ -9,7 +9,6 @@ module RbCloak
     module Entities
       # Realm management command
       class RoleCommand < AbstractManageCommand
-
         class ListSubCommand < RealmBindAbstractSubCommand
           include Mixins::AbstractListSubMixin
           print_params :name

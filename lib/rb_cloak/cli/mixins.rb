@@ -68,7 +68,7 @@ module RbCloak
 
         def execute
           entity = find_entity.first
-          entity.delete if entity
+          entity&.delete
         end
 
         def self.included(klass)

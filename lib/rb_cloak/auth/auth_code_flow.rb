@@ -9,6 +9,7 @@ require_relative 'general_flow'
 
 module RbCloak
   module Auth
+    # Auth code flow
     class AuthCodeFlow < GeneralFlow
       attr_reader :url, :realm, :client_id, :client_secret, :password, :username
 
@@ -129,5 +130,3 @@ module RbCloak
     end
   end
 end
-
-

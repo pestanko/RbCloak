@@ -6,7 +6,6 @@ require 'rb_cloak/auth'
 
 describe RbCloak::Auth::AuthCodeFlow do
   describe '#token' do
-
     before(:all) do
       @realm, @client = TestConfig.test_client_with_realm('auth_code_flow',
                                                           redirectUris: ['http://localhost:5000/'])

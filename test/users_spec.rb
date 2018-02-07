@@ -25,7 +25,6 @@ describe RbCloak::Users do
     manager.delete(manager.list[0][:id])
   end
 
-
   describe '#list' do
     let(:user_list) { manager.list }
 

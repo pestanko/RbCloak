@@ -56,3 +56,6 @@ Metrics/ClassLength:
 
 Metrics/ParameterLists:
   CountKeywordArgs: false
+
+Style/Documentation:
+  Enabled: false

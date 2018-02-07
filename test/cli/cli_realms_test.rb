@@ -37,18 +37,17 @@ describe 'RbCloak::Cli::Realms' do
 
     it 'will delete a realm' do
       TestConfig.cli("realms delete -v #{new_realm[:realm]}")
-      realm.read(realm_name).must_be_nil
+      deleted_realm = realm.read(realm_name)
+      deleted_realm.must_be_nil
     end
   end
 
   describe '#create' do
-
     before do
       command = "#{TestConfig.binary_path} realms create"
       IO.popen(command, 'r+') do |io|
         io.write '{ "realm": "test_realm_by_cli" }'
         io.close_write
-        result = io.read
       end
     end
 
@@ -75,12 +74,15 @@ describe 'RbCloak::Cli::Realms' do
       updated
     end
 
+    after do
+      updated_realm.delete
+    end
+
     let(:updated) do
       command = "#{TestConfig.binary_path} realms update #{realm_name}"
       IO.popen(command, 'r+') do |io|
         io.write '{ "enabled": true }'
         io.close_write
-        result = io.read
       end
     end
 

@@ -25,7 +25,6 @@ describe RbCloak::RealmRoles do
     new_entity.delete
   end
 
-
   describe '#list' do
     let(:manager_list) { manager.list }
 

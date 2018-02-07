@@ -1,4 +1,7 @@
 # RbCloak
+
+[![Build Status](https://travis-ci.org/pestanko/RbCloak.svg?branch=master)](https://travis-ci.org/pestanko/RbCloak)
+
 Based on documentation for **Keycloak 3.4**: http://www.keycloak.org/docs-api/3.4/rest-api/index.html
 
 
@@ -11,13 +14,13 @@ gem 'rb_cloak'
 ```
 
 And then execute:
-
+```bash
     $ bundle
-
+```
 Or install it yourself as:
-
+```bash
     $ gem install rb_cloak
-
+```
 ## Library Usage
 ```ruby
 client = RbCloak::KeycloakClient.new(url, username: username, password: password)
@@ -42,10 +45,10 @@ master.clients.find_by(some_attr: value, some_other_attr: value2) # Finds all cl
 
 
 ### Help
-```
+```bash
 $ bin/rbcloak --help
 
-Usage:                                                           
+Usage:
     rbcloak [OPTIONS] SUBCOMMAND [ARG] ...
 
 Parameters:
@@ -67,8 +70,9 @@ Options:
     -v, --verbose                 be verbose
     --version                     show version
 ```
+
 ### Help for subcommand
-```
+```bash
 $ bin/rbcloak realms --help
 
 Usage:
@@ -100,12 +104,24 @@ $ bin/rbcloak login -u admin -p admin -U 'http://localhost:8080'
 $ bin/rbcloak logout
 ```
 
-
-### Subcommands
+### Realm
 ```bash
-
+bin/rbcloak realms list # Gets the realms list
+bin/rbcloak realms read some_realm # Gets the realm's JSON representation
+bin/rbcloak realms delete some_realm # Deletes the realm
+bin/rbcloak realms update some_realm # Updates the realm (write JSON to STDIN, end it with EOF)
+bin/rbcloak realms create # Creates a realm (write JSON to STDIN, end it with EOF)
 ```
-###
+
+### Client
+```bash
+bin/rbcloak clients list --realm=master # List clients for the master realm
+bin/rbcloak clients secret --realm=master some_client # Gets the client's secret
+bin/rbcloak clients read --realm=master some_client # Gets the client JSON representation
+bin/rbcloak clients delete --realm=master some_client # Deletes the client
+bin/rbcloak clients update --realm=master some_client # Updates the client (write JSON to STDIN, end it with EOF)
+bin/rbcloak clients create --realm=master # Creates the client (write JSON to STDIN, end it with EOF)
+```
 
 ## Development
 

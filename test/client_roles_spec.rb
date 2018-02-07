@@ -27,7 +27,6 @@ describe RbCloak::ClientRoles do
     new_entity.delete
   end
 
-
   describe '#list' do
     let(:roles_list) { manager.list }
 

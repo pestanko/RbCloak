@@ -9,7 +9,7 @@ require_relative 'entities/role'
 
 module RbCloak
   module Cli
-   module Entities
-   end
+    module Entities
+    end
   end
 end

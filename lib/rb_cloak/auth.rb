@@ -34,5 +34,3 @@ module RbCloak
     end
   end
 end
-
-

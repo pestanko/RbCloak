@@ -23,7 +23,7 @@ describe RbCloak::Auth do
     it 'will throw an exception invalid credentials' do
       assert_raises(RbCloak::Auth::InvalidCredentialsError) do
         RbCloak::Auth.auth_token(:DirectAccessFlow, url, username: 'noneUser',
-                                 password: '1111111-111')
+                                                         password: '1111111-111')
           .access_token
       end
     end

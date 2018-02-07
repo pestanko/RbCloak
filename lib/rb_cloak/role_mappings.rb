@@ -4,7 +4,6 @@ require_relative 'defaults'
 require_relative 'client_roles'
 require_relative 'client_permissions'
 
-
 module RbCloak
   # Documentation:
   # * REST: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_role_mapper_resource

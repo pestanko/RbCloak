@@ -6,7 +6,6 @@ module RbCloak
   module Tools
     # Custom logging module
     module LoggingSupport
-
       def self.set_level(level)
         default_factory.set_level(level)
       end
@@ -35,6 +34,7 @@ module RbCloak
         klass.log_name(klass.name)
       end
 
+      # Creates instances of the logger
       class LoggingFactory
         def initialize(env_var_name)
           @env_var_name = env_var_name

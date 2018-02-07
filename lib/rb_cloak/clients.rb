@@ -7,7 +7,6 @@ require_relative 'realm_scope_mappings'
 require_relative 'client_scope_mappings'
 require_relative 'users'
 
-
 module RbCloak
   # Documentation:
   # * REST: http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_clients_resource

@@ -56,7 +56,6 @@ describe 'RbCloak CLI Users' do
     end
   end
 
-
   describe '#create' do
     # TODO
   end

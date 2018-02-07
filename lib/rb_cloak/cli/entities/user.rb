@@ -9,7 +9,6 @@ module RbCloak
     module Entities
       # Realm management command
       class UserCommand < AbstractManageCommand
-
         class ListSubCommand < RealmBindAbstractSubCommand
           include Mixins::AbstractListSubMixin
           print_params :username

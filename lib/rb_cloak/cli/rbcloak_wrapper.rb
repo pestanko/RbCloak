@@ -63,7 +63,7 @@ module RbCloak
         path ||= @path
         return {} unless File.exist? path
         log.debug("[CFG] Loading config file: #{path}")
-        loaded = YAML::load_file(path)
+        loaded = YAML.load_file(path)
         log.debug("[CFG] Loaded: #{loaded}")
         loaded
       end
@@ -74,7 +74,7 @@ module RbCloak
       extend RbCloak::Tools::LoggingSupport
 
       def self.instance
-        @instance ||= self.new
+        @instance ||= new
       end
 
       def temp_dir

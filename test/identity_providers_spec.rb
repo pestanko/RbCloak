@@ -25,7 +25,6 @@ describe RbCloak::IdentityProviders do
     new_entity.delete
   end
 
-
   describe '#list' do
     let(:user_list) { manager.list }
 
