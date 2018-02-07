@@ -18,9 +18,94 @@ Or install it yourself as:
 
     $ gem install rb_cloak
 
-## Usage
+## Library Usage
+```ruby
+client = RbCloak::KeycloakClient.new(url, username: username, password: password)
+client.realms.create({realm: 'test_realm'})  # Creates the test realm
+client.realms.list # Returns the array of the realms
+master = client.realms['master'] # Returns the realms with the name - master
 
-TODO: Write usage instructions here
+master[:enabled] = true
+master.update # Updates the master realm - in this case, it will enable it
+client.realms['test_realm'].delete # Deletes the realm
+# Clients
+master.clients.list # Lists the client that are binded to master realm
+master.clients['some_client'] # Reads the client (usign it's name)
+master.clients.find_by_name('some_client') # Is same as calling the [] operator
+master.clients.read("CLIENT'S UUID") # Reads the client based on the client's UUID
+master.clients.find_by_client_id('client_id') # Finds client by it's id
+master.clients.find_by(some_attr: value, some_other_attr: value2) # Finds all clients which attribute matches the value
+```
+
+## CLI Usage
+
+
+
+### Help
+```
+$ bin/rbcloak --help
+
+Usage:                                                           
+    rbcloak [OPTIONS] SUBCOMMAND [ARG] ...
+
+Parameters:
+    SUBCOMMAND                    subcommand
+    [ARG] ...                     subcommand arguments
+
+Subcommands:
+    clienttemplates               ClientTemplates management command
+    roles                         Roles management command
+    clients                       Clients management command
+    users                         Users management command
+    groups                        Groups management command
+    realms                        Realms management command
+    login                         Provide login information for the keycloack
+    logout                        Logout the keycloack
+
+Options:
+    -h, --help                    print help
+    -v, --verbose                 be verbose
+    --version                     show version
+```
+### Help for subcommand
+```
+$ bin/rbcloak realms --help
+
+Usage:
+    rbcloak realms [OPTIONS] SUBCOMMAND [ARG] ...
+
+  Realms management command
+
+Parameters:
+    SUBCOMMAND                    subcommand
+    [ARG] ...                     subcommand arguments
+
+Subcommands:
+    list                          List the realm
+    create                        Create the realm
+    update                        Update the realm
+    delete                        Delete the realm
+    read                          Read the realm
+
+Options:
+    -h, --help                    print help
+    -v, --verbose                 be verbose
+    --version                     show version
+
+```
+
+### Login and Logout
+```bash
+$ bin/rbcloak login -u admin -p admin -U 'http://localhost:8080'
+$ bin/rbcloak logout
+```
+
+
+### Subcommands
+```bash
+
+```
+###
 
 ## Development
 

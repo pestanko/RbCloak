@@ -34,6 +34,17 @@ module RbCloak
           find_param :clientId
         end
 
+        class SecretSubCommand < RealmBindAbstractSubCommand
+          include Mixins::AbstractReadSubMixin
+
+          def execute
+            entity = find_entity.first
+            puts entity.secret
+          end
+
+          find_param :clientId
+        end
+
         load_entities
       end
     end

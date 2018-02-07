@@ -105,6 +105,14 @@ module RbCloak
       res[0] unless res.empty?
     end
 
+    # Finds a resource by name
+    #
+    # @param [String] name Name of the resource
+    # @return [RbShift::Default] Resource instance
+    def [](name)
+      find_by_name(name)
+    end
+
     # Finds resources by given condition in block
     #
     # @param [Block] block Block with a condition
