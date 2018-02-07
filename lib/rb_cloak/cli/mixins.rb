@@ -24,6 +24,8 @@ module RbCloak
 
         def execute
           manager.list.each { |e| print_entity(e, *self.class.p_params) }
+        rescue StandardError
+          puts 'List failed.'
         end
 
         def self.included(klass)
@@ -52,6 +54,8 @@ module RbCloak
         def execute
           entity = find_entity.first
           print_entity(entity)
+        rescue StandardError
+          puts "Entity not found: #{entity}"
         end
 
         def self.included(klass)
@@ -69,6 +73,9 @@ module RbCloak
         def execute
           entity = find_entity.first
           entity&.delete
+          puts 'Deleted'
+        rescue StandardError
+          puts 'Delete failed'
         end
 
         def self.included(klass)
@@ -104,6 +111,9 @@ module RbCloak
         def execute
           content = read_content
           manager.create(**content)
+          puts 'Created.'
+        rescue StandardError
+          puts 'Create failed.'
         end
 
         def self.included(klass)
@@ -126,6 +136,8 @@ module RbCloak
           entity.entity.merge!(content)
           log.debug("UPDATED: #{entity.entity}")
           entity.update
+          entity.read
+          print_entity(entity)
         end
 
         def self.included(klass)
