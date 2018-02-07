@@ -57,6 +57,20 @@ describe 'RbCloak CLI Users' do
   end
 
   describe '#create' do
-    # TODO
+    before do
+      command = "#{TestConfig.binary_path} users create -v --realm=#{realm_name}"
+      IO.popen(command, 'r+') do |io|
+        io.write '{ "username": "test_user_by_cli" }'
+        io.close_write
+      end
+    end
+
+    let(:created_user) do
+      manager['test_user_by_cli']
+    end
+
+    it 'will create user' do
+      created_user[:username].must_equal 'test_user_by_cli'
+    end
   end
 end

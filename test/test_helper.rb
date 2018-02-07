@@ -93,7 +93,7 @@ module TestConfig
 
   def self.cli(command)
     exe = binary_path
-    log.debug("Executing: #{exe} #{command}")
+    log.debug("[EXECUTE]: #{exe} #{command}")
     `#{exe} #{command}`
   end
 end

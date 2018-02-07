@@ -58,10 +58,28 @@ describe 'RbCloak CLI Client' do
   end
 
   describe '#secret' do
-    # TODO
+    let(:cli_secret) { TestConfig.cli("clients secret -v --realm=#{realm_name} #{entity_name}") }
+    it '' do
+      cli_secret.strip.must_equal new_entity.secret
+    end
   end
 
   describe '#create' do
-    # TODO
+    before do
+      command = "#{TestConfig.binary_path} clients create -v --realm=#{realm_name}"
+      IO.popen(command, 'r+') do |io|
+        io.write '{ "name": "test_client_by_cli", "clientId": "test_client_by_cli" }'
+        io.close_write
+      end
+    end
+
+    let(:created_client) do
+      manager['test_client_by_cli']
+    end
+
+    it 'will create client' do
+      created_client[:name].must_equal 'test_client_by_cli'
+      created_client[:clientId].must_equal 'test_client_by_cli'
+    end
   end
 end
