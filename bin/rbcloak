@@ -4,4 +4,8 @@
 require 'bundler/setup'
 require 'rb_cloak/cli/main'
 
-RbCloak::Cli::MainCommand.run
+begin
+  RbCloak::Cli::MainCommand.run
+rescue RbCloak::Cli::NotLoggedInError
+  puts 'You are not logged in, please log in using: $ rbcloak login'
+end

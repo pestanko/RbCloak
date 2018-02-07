@@ -21,6 +21,10 @@ module RbCloak
         @config = {}
       end
 
+      def loggedin?
+        config['url'] && config['username'] && config['password']
+      end
+
       def load(path = nil)
         @config.merge!(load_file(path))
       end
@@ -109,9 +113,12 @@ module RbCloak
       end
 
       def client
-        @client ||= RbCloak::KeycloakClient.new(url,
-                                                username: username,
-                                                password: password)
+        @client ||= begin
+                  raise NotLoggedInError unless config.loggedin?
+                  RbCloak::KeycloakClient.new(url,
+                                              username: username,
+                                              password: password)
+                end
       end
     end
   end
