@@ -10,6 +10,6 @@ gemspec
 gem 'addressable'
 gem 'clamp'
 gem 'minitest-hooks', '~> 1.4'
-gem 'minitest-reporters'
+gem 'minitest-reporters', '~> 1.3'
 gem 'nokogiri'
 gem 'rest-client'
