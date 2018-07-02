@@ -59,7 +59,7 @@ describe 'RbCloak CLI Client' do
 
   describe '#secret' do
     let(:cli_secret) { TestConfig.cli("clients secret -v --realm=#{realm_name} #{entity_name}") }
-    it '' do
+    it 'will use the correct secret' do
       cli_secret.strip.must_equal new_entity.secret
     end
   end

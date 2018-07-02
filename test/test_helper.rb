@@ -4,6 +4,8 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'rb_cloak'
 require 'minitest/hooks/default'
 require 'minitest/autorun'
+require 'minitest/reporters'
+
 
 module TestConfig
   extend RbCloak::Tools::LoggingSupport
@@ -20,20 +22,20 @@ module TestConfig
     @login ||= ENV['KEYCLOAK_LOGIN'] || 'admin:admin'
   end
 
-  def self.credentials
+  def self.user_credentials
     {
-      username: username,
-      password: password,
+      username:   username,
+      password:   password,
       grant_type: 'password',
-      client_id: 'admin-cli',
+      client_id:  'admin-cli',
     }
   end
 
   def self.client_credentials
     {
-      client_id: client_id,
+      client_id:     client_id,
       client_secret: client_secret,
-      grant_type: 'client_credentials',
+      grant_type:    'client_credentials',
     }
   end
 
@@ -42,7 +44,7 @@ module TestConfig
   end
 
   def self.client_secret
-    @client_secret ||= ENV['KEYCLOAK_CLIENT_SECRET'] || '88cd8603-cf39-41ef-8e09-0719b91bcf9f'
+    @client_secret ||= ENV['KEYCLOAK_CLIENT_SECRET'] || '12a7f771-89a3-4aee-8369-486c38fc7e9c'
   end
 
   def self.password
@@ -54,7 +56,8 @@ module TestConfig
   end
 
   def self.client
-    @client ||= RbCloak::KeycloakClient.new(url, username: username, password: password)
+    # @client ||= RbCloak::KeycloakClient.new(url, username: username, password: password)
+    @client ||= RbCloak::KeycloakClient.new(url, **user_credentials)
   end
 
   def self.test_realm(name)
@@ -73,7 +76,7 @@ module TestConfig
   end
 
   def self.test_client_with_realm(name, **params)
-    realm = test_realm(name)
+    realm  = test_realm(name)
     client = test_client(realm, name, **params)
     [realm, client]
   end
@@ -97,3 +100,10 @@ module TestConfig
     `#{exe} #{command}`
   end
 end
+
+
+Minitest::Reporters.use! [
+                           Minitest::Reporters::SpecReporter.new,
+                           Minitest::Reporters::JUnitReporter.new('reports/junit'),
+                           Minitest::Reporters::HtmlReporter.new(reports_dir: 'reports/html'),
+                         ]

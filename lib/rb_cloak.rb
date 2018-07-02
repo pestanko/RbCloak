@@ -54,20 +54,6 @@ module RbCloak
 
     private
 
-    def user_credentials(username, password)
-      {
-        username: username,
-        password: password,
-      }
-    end
-
-    def service_credentials(id, secret)
-      {
-        client_id:     id,
-        client_secret: secret,
-      }
-    end
-
     def select_flow
       if @credentials[:client_secret] && @credentials[:client_id]
         :DirectAccessFlowClient

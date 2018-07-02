@@ -20,10 +20,12 @@ module RbCloak
     # Direct access flow using username and password
     class DirectAccessFlowUser < DirectAccessFlow
       def credentials
-        {
+        cred = {
           grant_type: 'password',
           client_id:  'admin-cli',
         }.merge(@credentials)
+        cred[:client_id] = 'admin-cli'
+        cred
       end
     end
   end

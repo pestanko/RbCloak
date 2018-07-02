@@ -7,9 +7,9 @@ require 'rb_cloak/auth'
 describe RbCloak::Auth do
   describe '#token' do
     let(:url) { TestConfig.url }
-    let(:credentials) { TestConfig.credentials }
+    let(:user_credentials) { TestConfig.user_credentials }
     let(:client_credentials) { TestConfig.client_credentials }
-    let(:auth) { RbCloak::Auth.auth_token(:DirectAccessFlow, url, **credentials) }
+    let(:auth) { RbCloak::Auth.auth_token(:DirectAccessFlow, url, **user_credentials) }
     let(:auth_client) { RbCloak::Auth.auth_token(:DirectAccessFlow, url, client_credentials) }
 
     it 'will return valid token for valid client credentials' do

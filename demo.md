@@ -58,3 +58,7 @@ bundle exec rake rubocop
 bundle exec rake tests
 ```
 
+
+### Challenge
+* Keycloak - API (create and update do not return entity responses)
+* Flows -> Direct access flow vs AuthCodeFlow 
