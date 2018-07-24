@@ -34,7 +34,15 @@ module RbCloak
       body = JSON.dump(params)
       result = check_request { RestClient.put(url, body, headers) }
       log.debug("Password set response: #{result}")
-      self
+      result
+    end
+
+    def logout(user_id)
+      url = "#{self.url}/#{user_id}/logout"
+      log.info("Logging out the user: #{url}")
+      result = check_request { RestClient.post(url, {}, headers) }
+      log.debug("Logout response: #{result}")
+      result
     end
   end
 
@@ -54,6 +62,10 @@ module RbCloak
 
     def password(passwd, **kwargs)
       client.set_password(entity_id, passwd, **kwargs)
+    end
+
+    def logout
+      client.logout(entity_id)
     end
   end
   # Service account user entity
