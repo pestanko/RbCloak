@@ -67,4 +67,10 @@ describe RbCloak::Users do
       new_entity.password('123456').wont_be_nil
     end
   end
+
+  describe '#logout' do
+    it 'will logout user' do
+      new_entity.logout.wont_be_nil
+    end
+  end
 end

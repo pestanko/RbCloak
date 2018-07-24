@@ -15,9 +15,9 @@ module RbCloak
           @print_params
         end
 
-        def print_entity(e, *params)
+        def print_entity(entity, *params)
           params.each do |param|
-            print e[param] + ' '
+            print entity[param] + ' '
           end
           puts ''
         end

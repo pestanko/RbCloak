@@ -11,7 +11,7 @@ module RbCloak
       end
 
       def self.default_factory
-        @factory ||= LoggingFactory.new('KEYCLOAK_ADMIN_LOG_LEVEL')
+        @default_factory ||= LoggingFactory.new('KEYCLOAK_ADMIN_LOG_LEVEL')
       end
 
       # @api public
@@ -19,7 +19,7 @@ module RbCloak
       #
       # @return [Logger] Logger
       def log
-        @logger = LoggingSupport.default_factory.get_logger(name: log_name)
+        @log = LoggingSupport.default_factory.get_logger(name: log_name)
       end
 
       def log_name(name = nil)

@@ -314,8 +314,8 @@ module RbCloak
     # If symbol is not defined in current class, it will be forwarded to entity hash
     # @param [Symbol, String] symbol Method name
     # @return [Bool] true if responds, false otherwise
-    def respond_to_missing?(symbol, *_)
-      entity.respond_to?(symbol) || entity.key?(symbol)
+    def respond_to_missing?(symbol, *args)
+      entity.respond_to?(symbol) || entity.key?(symbol) || super
     end
 
     # Method missing implementation

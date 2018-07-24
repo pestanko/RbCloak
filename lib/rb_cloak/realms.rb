@@ -48,11 +48,11 @@ module RbCloak
     end
 
     def roles
-      @users ||= RbCloak::RealmRoles.new(client, self)
+      @roles ||= RbCloak::RealmRoles.new(client, self)
     end
 
     def identity_providers
-      @providers ||= RbCloak::IdentityProviders.new(client, self)
+      @identity_providers ||= RbCloak::IdentityProviders.new(client, self)
     end
   end
 end

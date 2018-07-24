@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+
 require 'rb_cloak'
 require 'minitest/hooks/default'
 require 'minitest/autorun'
 require 'minitest/reporters'
-
 
 module TestConfig
   extend RbCloak::Tools::LoggingSupport
@@ -101,9 +101,10 @@ module TestConfig
   end
 end
 
+reporters = [
+  Minitest::Reporters::SpecReporter.new,
+  Minitest::Reporters::JUnitReporter.new('reports/junit'),
+  Minitest::Reporters::HtmlReporter.new(reports_dir: 'reports/html'),
+]
 
-Minitest::Reporters.use! [
-                           Minitest::Reporters::SpecReporter.new,
-                           Minitest::Reporters::JUnitReporter.new('reports/junit'),
-                           Minitest::Reporters::HtmlReporter.new(reports_dir: 'reports/html'),
-                         ]
+Minitest::Reporters.use! reporters

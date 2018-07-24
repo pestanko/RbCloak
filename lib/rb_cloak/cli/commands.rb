@@ -43,7 +43,7 @@ module RbCloak
         end
 
         def get_outer_class
-          @outer_class ||= begin
+          @get_outer_class ||= begin
             outer_class_name = name.split('::')[-2]
             klass            = RbCloak::Cli::Entities.const_get(outer_class_name)
             klass

@@ -42,7 +42,7 @@ module RbCloak
     #
     # @return [RbCloak::Auth]
     def auth
-      @auth_token ||= auth_token(@flow, realm: 'master', **@credentials)
+      @auth ||= auth_token(@flow, realm: 'master', **@credentials)
     end
 
     # Gets a realm manager to be able to access, create, list, or update realms
