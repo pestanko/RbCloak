@@ -4,6 +4,7 @@ require 'json'
 
 require_relative 'defaults'
 require_relative 'user_client_scope_mappings'
+require_relative 'user_realm_role_mappings'
 
 module RbCloak
   # Documentation:
@@ -62,6 +63,14 @@ module RbCloak
 
     def password(passwd, **kwargs)
       client.set_password(entity_id, passwd, **kwargs)
+    end
+
+    def client_role_mappings(client_id)
+      RbCloak::UserClientRoleMappings.new(client, self, client_id)
+    end
+
+    def realm_role_mappings
+      RbCloak::UserRealmRoleMappings.new(client, self)
     end
 
     def logout
