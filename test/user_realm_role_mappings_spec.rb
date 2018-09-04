@@ -2,13 +2,14 @@
 
 require_relative 'test_helper'
 
-require 'rb_cloak/client_scope_mappings'
+require 'rb_cloak/user_realm_role_mappings'
 
-describe RbCloak::ClientScopeMappings do
+describe RbCloak::UserRealmRoleMappings do
   before(:all) do
-    @realm, @client = TestConfig.test_client_with_realm('client_realm_scope_mappings',
+    @realm, @client = TestConfig.test_client_with_realm('user_realm_role_mappings',
                                                         serviceAccountsEnabled: true,
                                                         standardFlowEnabled:    false)
+    @user = @client.service_account
     @realm_mgmt_client = @realm.clients.find_by_client_id('realm-management')
   end
 
@@ -17,9 +18,7 @@ describe RbCloak::ClientScopeMappings do
     @realm.delete
   end
 
-  let(:manager) { @client.client_scope_mappings(@realm_mgmt_client['id']) }
-
-  let(:entity_name) { 'admin' }
+  let(:manager) { @user.realm_role_mappings(@realm_mgmt_client['id']) }
 
   describe '#list' do
     let(:mappings_list) { manager.list }
@@ -44,6 +43,15 @@ describe RbCloak::ClientScopeMappings do
     let(:composite_list) { manager.available }
     it 'will list composite mapping for the client' do
       composite_list.must_be_kind_of Array
+    end
+  end
+
+  describe '#add_mappings' do
+    let(:avail_list) { manager.available }
+    it 'will update the service account roles' do
+      mappings = avail_list.select { |role| role['name'] == 'offline_access' }
+      manager.add_mappings(*mappings)
+      manager.list.wont_be_empty
     end
   end
 end
